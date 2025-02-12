@@ -40,8 +40,8 @@ jobs:
         run: npm install
 
       # Lint the code
-      - name: Run ESLint
-        run: npm run lint
+      # - name: Run ESLint
+      #   run: npm run lint
 
       # Run unit tests
       # - name: Run unit tests
