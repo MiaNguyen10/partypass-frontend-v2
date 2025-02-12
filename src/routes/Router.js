@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 
 import Loadable from '../layouts/full/shared/loadable/Loadable';
 import { element } from 'prop-types';
+import { roles } from '../config/Constant';
 
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
@@ -48,6 +49,7 @@ const Landingpage = Loadable(lazy(() => import('../views/pages/landingpage/Landi
 
 // Protected Route
 const ProtectedRoute = Loadable(lazy(() => import('../middlewares/ProtectedRoute')));
+const ProtectedRouteForRole = Loadable(lazy(() => import('../middlewares/ProtectedRouteForRole')));
 
 const Router = [
   {
@@ -59,25 +61,32 @@ const Router = [
         children: [
           { path: '/', element: <Navigate to="/dashboards/modern" /> },
           { path: '/dashboards/modern', exact: true, element: <ModernDash /> },
-          { path: '/institutions', element: <InstitutionList /> },
-          { path: '/institutions/:id', element: <InstitutionDetail /> },
-          { path: '/institutions/:id/edit', element: <InstitutionEdit /> },
-          { path: '/institutions/create', element: <InstitutionCreate /> },
-          
-          { path: '/tickets', element: <TicketList /> },
-          { path: '/tickets/:id', element: <TicketDetail /> },
-          { path: '/tickets/:id/edit', element: <TicketEdit /> },
-          { path: '/tickets/create', element: <TicketCreate /> },
+          {
+            element: <ProtectedRouteForRole permissionRoles={[roles[1].id]} />,
+            children: [
+              //institution
+              { path: '/institutions', element: <InstitutionList /> },
+              { path: '/institutions/:id', element: <InstitutionDetail /> },
+              { path: '/institutions/:id/edit', element: <InstitutionEdit /> },
+              { path: '/institutions/create', element: <InstitutionCreate /> },
 
-          { path: '/purchase', element: <PurchaseList /> },
-          { path: '/purchase/:id', element: <PurchaseDetail /> },
+              //ticket
+              { path: '/tickets', element: <TicketList /> },
+              { path: '/tickets/:id', element: <TicketDetail /> },
+              { path: '/tickets/:id/edit', element: <TicketEdit /> },
+              { path: '/tickets/create', element: <TicketCreate /> },
 
-          { path: '/users', element: <UserList /> },
-          { path: '/users/:id', element: <UserDetail /> },
-          { path: '/users/:id/edit', element: <UserEdit /> },
-          { path: '/users/create', element: <UserCreate /> },
+              //user
+              { path: '/users', element: <UserList /> },
+              { path: '/users/:id', element: <UserDetail /> },
+              { path: '/users/:id/edit', element: <UserEdit /> },
+              { path: '/users/create', element: <UserCreate /> },
 
-          { path: '/pages/account-settings', element: <AccountSetting /> },
+              //purchase
+              { path: '/purchase', element: <PurchaseList /> },
+              { path: '/purchase/:id', element: <PurchaseDetail /> },
+            ],
+          },
 
           { path: '*', element: <Navigate to="/auth/404" /> },
         ],
