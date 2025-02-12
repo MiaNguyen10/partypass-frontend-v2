@@ -53,13 +53,6 @@ jobs:
         env:
           DEPLOY_PLATFORM: github
 
-      # Deploy to GitHub Pages
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: dist
-
       # Deploy to Netlify
       - name: Deploy to Netlify
         env:
