@@ -1,0 +1,43 @@
+import axios from "axios";
+
+const axiosFormData = axios.create({
+  baseURL: "https://partypass-server.onrender.com",
+  headers: {
+    "Content-Type": "multipart/form-data",
+    Accept: "*/*",
+  },
+});
+
+// Request interceptor for adding token to headers if available
+axiosFormData.interceptors.request.use(
+  (config) => {
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Response interceptor for handling errors globally
+axiosFormData.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response) {
+      // Server responded with a status other than 2xx
+      console.error("Response Error:", error.response.data);
+    } else if (error.request) {
+      // No response received from server
+      console.error("No response received:", error.request);
+    } else {
+      // Error setting up the request
+      console.error("Request Error:", error.message);
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default axiosFormData;
