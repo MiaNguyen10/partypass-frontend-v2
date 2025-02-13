@@ -4,10 +4,10 @@ import { Box } from '@mui/system';
 import { jwtDecode } from 'jwt-decode';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import Breadcrumb from '../../../layouts/full/shared/breadcrumb/Breadcrumb';
-import { createLocker } from '../../../store/thunk/locker';
-import LockerForm from '../../locker/LockerForm';
-import schemaLocker from '../../locker/schemaLocker';
+import Breadcrumb from '../../layouts/full/shared/breadcrumb/Breadcrumb';
+import { createLocker } from '../../store/thunk/locker';
+import LockerForm from './LockerForm';
+import schemaLocker from './schemaLocker';
 
 const BCrumb = [
   {
@@ -23,9 +23,9 @@ const BCrumb = [
   },
 ];
 
-const TicketCreate = () => {
+const LockerCreate = () => {
   const dispatch = useDispatch();
-  const { institution_id } = jwtDecode(sessionStorage.getItem('token'));
+  const {institution_id} = jwtDecode(sessionStorage.getItem("token"));
 
   const {
     handleSubmit,
@@ -51,6 +51,7 @@ const TicketCreate = () => {
     });
     reset();
   };
+
   return (
     <Box>
       {/* breadcrumb */}
@@ -72,4 +73,4 @@ const TicketCreate = () => {
   );
 };
 
-export default TicketCreate;
+export default LockerCreate;

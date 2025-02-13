@@ -1,9 +1,6 @@
-import { uniqueId } from "lodash";
-import { IconHome } from '@tabler/icons-react';
-import { IconTicket } from '@tabler/icons-react';
-import { IconBuildingCommunity } from '@tabler/icons-react';
-import { IconShoppingBagCheck } from '@tabler/icons-react';
-import pages from "../../../../config/pages";
+import { IconBuildingCommunity, IconHome, IconLockPin, IconShoppingBagCheck, IconTicket } from '@tabler/icons-react';
+import { uniqueId } from 'lodash';
+import pages from '../../../../config/pages';
 
 const MenuItemsForInstitution = [
   {
@@ -14,22 +11,28 @@ const MenuItemsForInstitution = [
   },
   {
     id: uniqueId(),
-    title: 'Tickets',
-    icon: IconTicket,
-    href: pages.ticketsPath,
+    title: 'Institution',
+    icon: IconBuildingCommunity,
+    href: '/institution_detail',
   },
   {
     id: uniqueId(),
-    title: 'Institutions',
-    icon: IconBuildingCommunity,
-    href: pages.institutionsPath,
+    title: 'Tickets',
+    icon: IconTicket,
+    href: pages.ticketsPathForInstitution,
+  },
+  {
+    id: uniqueId(),
+    title: 'Lockers',
+    icon: IconLockPin,
+    href: pages.lockersPath,
   },
   {
     id: uniqueId(),
     title: 'Purchase',
     icon: IconShoppingBagCheck,
-    href: pages.purchasePath,
-  }
+    href: pages.purchasePathForInstitution,
+  },
 ];
 
 export default MenuItemsForInstitution;

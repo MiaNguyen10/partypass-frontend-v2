@@ -1,29 +1,28 @@
 import { Box, CardContent, CardMedia, Link, Typography } from '@mui/material';
 import { Stack, styled } from '@mui/system';
+import { jwtDecode } from 'jwt-decode';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import BlankCard from '../../components/shared/BlankCard';
-import { institution_status, roles } from '../../config/Constant';
+import { institution_status } from '../../config/Constant';
 import { getInstitution } from '../../store/reducers/institution/institutionSlice';
 import { getInstitutionById } from '../../store/thunk/institution';
 import MapComponent from './MapComponent';
-import RestrictedPermission from '../../middlewares/PermissionProvider/RestrictedPermission';
 
 const DetailTypo = styled(Typography)(({ theme }) => ({
   color: theme.palette.black,
   fontSize: '1rem',
 }));
 
-const InstitutionDetail = () => {
+const InstitutionDetail2 = () => {
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const {institution_id} = jwtDecode(sessionStorage.getItem('token'));
   const institution = useSelector(getInstitution);
 
   useEffect(() => {
-    dispatch(getInstitutionById(id));
-  }, [dispatch, id]);
+    dispatch(getInstitutionById(institution_id));
+  }, [dispatch, institution_id]);
 
   const BCrumb = [
     {
@@ -31,11 +30,7 @@ const InstitutionDetail = () => {
       title: 'Home',
     },
     {
-      to: '/institutions',
-      title: 'Institution List',
-    },
-    {
-      title: 'Detail',
+      title: 'Institution Detail',
     },
   ];
 
@@ -133,24 +128,10 @@ const InstitutionDetail = () => {
               )}
             </DetailTypo>
           </Stack>
-          <RestrictedPermission allowedRoles={[roles[1].value]}>
-            <Stack direction="row" gap={6} alignItems="center" my={2}>
-              <DetailTypo>
-                <strong>Locker page:</strong>{' '}
-                <Link
-                  href={`/institutions/${id}/lockers`}
-                  underline="hover"
-                  rel="noopener noreferrer"
-                >
-                  Press here to open Locker
-                </Link>
-              </DetailTypo>
-            </Stack>
-          </RestrictedPermission>
         </CardContent>
       </BlankCard>
     </Box>
   );
 };
 
-export default InstitutionDetail;
+export default InstitutionDetail2;

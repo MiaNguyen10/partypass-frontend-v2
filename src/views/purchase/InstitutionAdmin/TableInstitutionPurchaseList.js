@@ -5,19 +5,20 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { ticket_status } from '../../../config/Constant';
-import { selectPurchaseList } from '../../../store/reducers/purchase/purchaseSlice';
-import { getPurchaseList } from '../../../store/thunk/purchase';
+import { selectPurchaseListForInstitution } from '../../../store/reducers/purchase/purchaseSlice';
+import { getPurchaseListForInstitution } from '../../../store/thunk/purchase';
 import PurchaseTable from '../PurchaseTable';
+import { jwtDecode } from 'jwt-decode';
 
-const TablePurchaseList = () => {
+const TableInstitutionPurchaseList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const purchaseList = useSelector(selectPurchaseList);
+  const { institution_id } = jwtDecode(sessionStorage.getItem('token'));
+  const purchaseList = useSelector(selectPurchaseListForInstitution);
 
   useEffect(() => {
-    dispatch(getPurchaseList());
-  }, [dispatch]);
+    dispatch(getPurchaseListForInstitution(institution_id));
+  }, [dispatch, institution_id]);
 
   const headCells = [
     {
@@ -83,7 +84,7 @@ const TablePurchaseList = () => {
       render: (row) => (
         <>
           <Tooltip title="View">
-            <IconButton size="small" onClick={() => navigate(`/purchase/${row.purchase_id}`)}>
+            <IconButton size="small" onClick={() => navigate(`/purchase_institution/${row.purchase_id}`)}>
               <IconEye size="1.1rem" />
             </IconButton>
           </Tooltip>
@@ -108,4 +109,4 @@ const TablePurchaseList = () => {
   );
 };
 
-export default TablePurchaseList;
+export default TableInstitutionPurchaseList;

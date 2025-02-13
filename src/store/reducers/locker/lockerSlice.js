@@ -1,21 +1,22 @@
-import { createSlice } from "@reduxjs/toolkit";
-import {loading_status} from "../../../config/Constant"
-import { createLocker, deleteLocker, getLockerById, getLockerListByInstitution, updateLocker } from "../../thunk/locker";
+import { createSlice } from '@reduxjs/toolkit';
+import { loading_status } from '../../../config/Constant';
+import {
+  createLocker,
+  deleteLocker,
+  getLockerById,
+  getLockerListByInstitution,
+  updateLocker,
+} from '../../thunk/locker';
 
 const initialState = {
   lockers: [],
   loading: loading_status.idle,
   error: null,
-  locker: {
-    id: "",
-    institution_id: "",
-    locker_number: "",
-    status: "",
-  },
+  locker: {},
 };
 
 const lockerSlice = createSlice({
-  name: "locker",
+  name: 'locker',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -27,7 +28,7 @@ const lockerSlice = createSlice({
         state.loading = loading_status.succeeded;
         state.lockers = action.payload.map((locker) => ({
           id: locker.id,
-          institution_id: locker.institution_id,
+          institution_name: locker.institution.name,
           locker_number: locker.locker_number,
           status: locker.status,
         }));
@@ -59,7 +60,7 @@ const lockerSlice = createSlice({
       .addCase(updateLocker.fulfilled, (state, action) => {
         state.loading = loading_status.succeeded;
         state.lockers = state.lockers.map((locker) =>
-          locker.id === action.payload.id ? action.payload : locker
+          locker.id === action.payload.id ? action.payload : locker,
         );
         state.error = null;
       })
@@ -84,9 +85,7 @@ const lockerSlice = createSlice({
       })
       .addCase(deleteLocker.fulfilled, (state, action) => {
         state.loading = loading_status.succeeded;
-        state.lockers = state.lockers.filter(
-          (locker) => locker.id !== action.payload.id
-        );
+        state.lockers = state.lockers.filter((locker) => locker.id !== action.payload.id);
         state.error = null;
       })
       .addCase(deleteLocker.rejected, (state, action) => {

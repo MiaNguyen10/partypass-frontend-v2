@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, Divider, IconButton, Menu, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as dropdownData from './data';
 
 import { Stack } from '@mui/system';
@@ -12,9 +12,11 @@ import Scrollbar from 'src/components/custom-scroll/Scrollbar';
 import { getUserLogin } from '../../../../store/reducers/user/userSlice';
 import { getUserInformation } from '../../../../store/thunk/user';
 import { roles } from '../../../../config/Constant';
+import { logout } from '../../../../store/reducers/authenticate/authenticateSlice';
 
 const Profile = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const currentUser = useSelector(getUserLogin);
   const [anchorEl2, setAnchorEl2] = useState(null);
   const handleClick2 = (event) => {
@@ -27,6 +29,11 @@ const Profile = () => {
   useEffect(() => {
     dispatch(getUserInformation());
   }, [dispatch]);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/auth/login');
+  }
 
   return (
     <Box>
@@ -152,7 +159,7 @@ const Profile = () => {
             ))}
             <Box mt={2}>
               <Button
-                to="/auth/login"
+                onClick={handleLogout}
                 variant="outlined"
                 color="primary"
                 component={Link}
