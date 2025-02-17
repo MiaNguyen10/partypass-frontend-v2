@@ -5,9 +5,9 @@ import { jwtDecode } from 'jwt-decode';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import Breadcrumb from '../../../layouts/full/shared/breadcrumb/Breadcrumb';
-import { createLocker } from '../../../store/thunk/locker';
-import LockerForm from '../../locker/LockerForm';
+import { createTicket } from '../../../store/thunk/ticket';
 import schemaLocker from '../../locker/schemaLocker';
+import TicketForm from './TicketForm';
 
 const BCrumb = [
   {
@@ -32,6 +32,7 @@ const TicketCreate = () => {
     control,
     formState: { errors: formErrors },
     reset,
+    watch,
   } = useForm({
     resolver: yupResolver(schemaLocker),
     defaultValues: {
@@ -42,15 +43,22 @@ const TicketCreate = () => {
   });
 
   const onSubmit = (data) => {
-    const lockerData = {
+    const ticketData = {
       ...data,
       institution_id: parseInt(institution_id, 10),
+      price: parseFloat(data.price),
+      capacity: parseInt(data.capacity, 10),
+      is_regular: data.is_regular ? 1 : 0,
+      date: data.is_regular ? '' : data.date,
+      start_datetime: data.is_regular ? '' : data.start_datetime,
+      end_datetime: data.is_regular ? '' : data.end_datetime,
     };
-    dispatch(createLocker({ lockerData })).catch((error) => {
+    dispatch(createTicket(ticketData)).catch((error) => {
       console.log(error);
     });
     reset();
   };
+
   return (
     <Box>
       {/* breadcrumb */}
@@ -59,11 +67,12 @@ const TicketCreate = () => {
 
       <Grid container spacing={3}>
         <Grid item lg={12} md={12} xs={12}>
-          <LockerForm
+          <TicketForm
             handleSubmit={handleSubmit}
             onSubmit={onSubmit}
             control={control}
             formErrors={formErrors}
+            watch={watch}
             reset={reset}
           />
         </Grid>
