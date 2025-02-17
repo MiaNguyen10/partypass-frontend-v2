@@ -15,8 +15,8 @@ const BCrumb = [
     title: 'Home',
   },
   {
-    to: '/lockers',
-    title: 'Locker List',
+    to: '/tickets',
+    title: 'Ticket List',
   },
   {
     title: 'Create',
