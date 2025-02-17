@@ -6,11 +6,11 @@ import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
+import Breadcrumb from '../../layouts/full/shared/breadcrumb/Breadcrumb';
 import { getUser } from '../../store/reducers/user/userSlice';
-import { getUserById, updateUser } from '../../store/thunk/user';
+import { getUserById, updateUserById } from '../../store/thunk/user';
 import schemaUser from './schemaUser';
 import UserForm from './UserForm';
-import Breadcrumb from '../../layouts/full/shared/breadcrumb/Breadcrumb';
 
 const BCrumb = [
     {
@@ -81,7 +81,7 @@ const UserEdit = () => {
       institution_id: parseInt(data.institution_id, 10),
       role: parseInt(data.role, 10),
     }
-    dispatch(updateUser({ user_id: id, userData: userData }))
+    dispatch(updateUserById({ user_id: id, userData: userData }))
       .then(() => {
         dispatch(getUserById({ user_id: id }));
         // Reset the file input

@@ -1,304 +1,455 @@
-import React from 'react';
-import { CardContent, Grid, Typography, MenuItem, Box, Avatar, Button, Stack } from '@mui/material';
+import {
+  Box,
+  Button,
+  CardContent,
+  FormControlLabel,
+  Grid,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 
 // components
-import BlankCard from '../../shared/BlankCard';
-import CustomTextField from '../../forms/theme-elements/CustomTextField';
 import CustomFormLabel from '../../forms/theme-elements/CustomFormLabel';
-import CustomSelect from '../../forms/theme-elements/CustomSelect';
+import CustomTextField from '../../forms/theme-elements/CustomTextField';
+import BlankCard from '../../shared/BlankCard';
 
 // images
-import user1 from 'src/assets/images/profile/user-1.jpg';
-
-// locations
-const locations = [
-  {
-    value: 'us',
-    label: 'United States',
-  },
-  {
-    value: 'uk',
-    label: 'United Kingdom',
-  },
-  {
-    value: 'india',
-    label: 'India',
-  },
-  {
-    value: 'russia',
-    label: 'Russia',
-  },
-];
-
-// currency
-const currencies = [
-  {
-    value: 'us',
-    label: 'US Dollar ($)',
-  },
-  {
-    value: 'uk',
-    label: 'United Kingdom (Pound)',
-  },
-  {
-    value: 'india',
-    label: 'India (INR)',
-  },
-  {
-    value: 'russia',
-    label: 'Russia (Ruble)',
-  },
-];
+import { yupResolver } from '@hookform/resolvers/yup';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+import { useEffect, useRef } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { roles, validFileExtensions } from '../../../config/Constant';
+import { getInstitution } from '../../../store/reducers/institution/institutionSlice';
+import { getUserLogin } from '../../../store/reducers/user/userSlice';
+import { getInstitutionById } from '../../../store/thunk/institution';
+import { getUserInformation, updateUser } from '../../../store/thunk/user';
+import PreviewFile from '../../../views/institution/PreviewFile';
+import schemaUser from '../../../views/user/schemaUser';
+import CustomCheckbox from '../../forms/theme-elements/CustomCheckbox';
 
 const AccountTab = () => {
-  const [location, setLocation] = React.useState('india');
+  const dispatch = useDispatch();
+  const userInfo = useSelector(getUserLogin);
+  const institution = useSelector(getInstitution);
+  const fileInputRef = useRef(null);
 
-  const handleChange1 = (event) => {
-    setLocation(event.target.value);
+  useEffect(() => {
+    dispatch(getUserInformation());
+    dispatch(getInstitutionById(userInfo?.institution_id));
+  }, [dispatch, userInfo?.institution_id]);
+
+  const {
+    handleSubmit,
+    control,
+    formState: { errors: formErrors },
+    reset,
+    watch,
+    setValue,
+  } = useForm({
+    resolver: yupResolver(schemaUser),
+    defaultValues: {
+      name: '',
+      email: '',
+      phone: '',
+      date_of_birth: dayjs(),
+      role: '',
+      institution_id: '',
+      is_social: false,
+      social_uuid: '',
+      profile_pic: [],
+    },
+  });
+
+  useEffect(() => {
+    if (userInfo) {
+      reset({
+        name: userInfo.name,
+        email: userInfo.email,
+        phone: userInfo.phone,
+        date_of_birth: dayjs(userInfo.date_of_birth),
+        role: userInfo.role,
+        institution_id: userInfo.institution_id || '',
+        is_social: userInfo.is_social,
+        social_uuid: userInfo.social_uuid,
+        profile_pic: userInfo.profile_pic || [],
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userInfo]);
+
+  const onSubmit = (data) => {
+    const userData = {
+      ...data,
+      institution_id: parseInt(data.institution_id, 10),
+      role: parseInt(data.role, 10),
+    };
+    dispatch(updateUser({ userData }))
+      .then(() => {
+        dispatch(getUserInformation());
+        // Reset the file input
+        if (fileInputRef.current) {
+          fileInputRef.current.value = null;
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
-  //   currency
-  const [currency, setCurrency] = React.useState('india');
+  function getAllowedExt(type) {
+    return validFileExtensions[type].map((e) => `.${e}`).toString();
+  }
 
-  const handleChange2 = (event) => {
-    setCurrency(event.target.value);
-  };
+  const profile_pic = watch('profile_pic');
+  const allowedExts = getAllowedExt('image');
 
   return (
     <Grid container spacing={3}>
-      {/* Change Profile */}
-      <Grid item xs={12} lg={6}>
-        <BlankCard>
-          <CardContent>
-            <Typography variant="h5" mb={1}>
-              Change Profile
-            </Typography>
-            <Typography color="textSecondary" mb={3}>Change your profile picture from here</Typography>
-            <Box textAlign="center" display="flex" justifyContent="center">
-              <Box>
-                <Avatar
-                  src={user1}
-                  alt={user1}
-                  sx={{ width: 120, height: 120, margin: '0 auto' }}
-                />
-                <Stack direction="row" justifyContent="center" spacing={2} my={3}>
-                  <Button variant="contained" color="primary" component="label">
-                    Upload
-                    <input hidden accept="image/*" multiple type="file" />
-                  </Button>
-                  <Button variant="outlined" color="error">
-                    Reset
-                  </Button>
-                </Stack>
-                <Typography variant="subtitle1" color="textSecondary" mb={4}>
-                  Allowed JPG, GIF or PNG. Max size of 800K
-                </Typography>
-              </Box>
-            </Box>
-          </CardContent>
-        </BlankCard>
-      </Grid>
-      {/*  Change Password */}
-      <Grid item xs={12} lg={6}>
-        <BlankCard>
-          <CardContent>
-            <Typography variant="h5" mb={1}>
-              Change Password
-            </Typography>
-            <Typography color="textSecondary" mb={3}>To change your password please confirm here</Typography>
-            <form>
-              <CustomFormLabel
-                sx={{
-                  mt: 0,
-                }}
-                htmlFor="text-cpwd"
-              >
-                Current Password
-              </CustomFormLabel>
-              <CustomTextField
-                id="text-cpwd"
-                value="MathewAnderson"
-                variant="outlined"
-                fullWidth
-                type="password"
-              />
-              {/* 2 */}
-              <CustomFormLabel htmlFor="text-npwd">New Password</CustomFormLabel>
-              <CustomTextField
-                id="text-npwd"
-                value="MathewAnderson"
-                variant="outlined"
-                fullWidth
-                type="password"
-              />
-              {/* 3 */}
-              <CustomFormLabel htmlFor="text-conpwd">Confirm Password</CustomFormLabel>
-              <CustomTextField
-                id="text-conpwd"
-                value="MathewAnderson"
-                variant="outlined"
-                fullWidth
-                type="password"
-              />
-            </form>
-          </CardContent>
-        </BlankCard>
-      </Grid>
-      {/* Edit Details */}
-      <Grid item xs={12}>
-        <BlankCard>
-          <CardContent>
-            <Typography variant="h5" mb={1}>
-              Personal Details
-            </Typography>
-            <Typography color="textSecondary" mb={3}>To change your personal detail , edit and save from here</Typography>
-            <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {/* Edit Details */}
+        <Grid item xs={12}>
+          <BlankCard>
+            <CardContent>
+              <Typography variant="h5" mb={1}>
+                Personal Details
+              </Typography>
+              <Typography color="textSecondary" mb={3}>
+                To change your personal detail , edit and save from here
+              </Typography>
               <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
-                  <CustomFormLabel
-                    sx={{
-                      mt: 0,
-                    }}
-                    htmlFor="text-name"
-                  >
-                    Your Name
-                  </CustomFormLabel>
-                  <CustomTextField
-                    id="text-name"
-                    value="Mathew Anderson"
-                    variant="outlined"
-                    fullWidth
+                  <Controller
+                    name="name"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Box>
+                        <CustomFormLabel
+                          sx={{
+                            mt: 0,
+                          }}
+                          htmlFor="text-name"
+                        >
+                          Your Name
+                        </CustomFormLabel>
+                        <CustomTextField
+                          value={value}
+                          onChange={onChange}
+                          error={!!formErrors.name}
+                          helperText={formErrors.name && formErrors.name.message}
+                          variant="outlined"
+                          fullWidth
+                        />
+                      </Box>
+                    )}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  {/* 2 */}
-                  <CustomFormLabel
-                    sx={{
-                      mt: 0,
-                    }}
-                    htmlFor="text-store-name"
-                  >
-                    Store Name
-                  </CustomFormLabel>
-                  <CustomTextField
-                    id="text-store-name"
-                    value="Maxima Studio"
-                    variant="outlined"
-                    fullWidth
+                  <Controller
+                    name="password"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Box>
+                        <CustomFormLabel
+                          sx={{
+                            mt: 0,
+                          }}
+                          htmlFor="password"
+                        >
+                          Password
+                        </CustomFormLabel>
+                        <CustomTextField
+                          type="password"
+                          value={value}
+                          onChange={onChange}
+                          error={!!formErrors.password}
+                          helperText={formErrors.password && formErrors.password.message}
+                          variant="outlined"
+                          fullWidth
+                        />
+                      </Box>
+                    )}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  {/* 3 */}
-                  <CustomFormLabel
-                    sx={{
-                      mt: 0,
-                    }}
-                    htmlFor="text-location"
-                  >
-                    Location
-                  </CustomFormLabel>
-                  <CustomSelect
-                    fullWidth
-                    id="text-location"
-                    variant="outlined"
-                    value={location}
-                    onChange={handleChange1}
-                  >
-                    {locations.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </CustomSelect>
+                  <Controller
+                    control={control}
+                    name="email"
+                    render={({ field: { onChange, value } }) => (
+                      <Box>
+                        <CustomFormLabel
+                          sx={{
+                            mt: 0,
+                          }}
+                          htmlFor="email"
+                        >
+                          Email
+                        </CustomFormLabel>
+                        <CustomTextField
+                          value={value}
+                          onChange={onChange}
+                          error={!!formErrors.email}
+                          helperText={formErrors.email && formErrors.email.message}
+                          type="email"
+                          variant="outlined"
+                          fullWidth
+                        />
+                      </Box>
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Controller
+                    control={control}
+                    name="phone"
+                    render={({ field: { onChange, value } }) => (
+                      <Box>
+                        <CustomFormLabel
+                          sx={{
+                            mt: 0,
+                          }}
+                          htmlFor="phone"
+                        >
+                          Phone
+                        </CustomFormLabel>
+                        <CustomTextField
+                          value={value}
+                          onChange={onChange}
+                          error={!!formErrors.phone}
+                          helperText={formErrors.phone && formErrors.phone.message}
+                          variant="outlined"
+                          fullWidth
+                        />
+                      </Box>
+                    )}
+                  />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   {/* 4 */}
-                  <CustomFormLabel
-                    sx={{
-                      mt: 0,
-                    }}
-                    htmlFor="text-currency"
-                  >
-                    Currency
-                  </CustomFormLabel>
-                  <CustomSelect
-                    fullWidth
-                    id="text-currency"
-                    variant="outlined"
-                    value={currency}
-                    onChange={handleChange2}
-                  >
-                    {currencies.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </CustomSelect>
+                  <Controller
+                    name="date_of_birth"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Box width="100%">
+                        <CustomFormLabel
+                          sx={{
+                            mt: 0,
+                          }}
+                          htmlFor="date_of_birth"
+                        >
+                          Date of birth
+                        </CustomFormLabel>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DatePicker
+                            value={value || null}
+                            onChange={onChange}
+                            inputFormat="DD/MM/YYYY"
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                error={!!formErrors?.date_of_birth}
+                                helperText={formErrors?.date_of_birth?.message}
+                                fullWidth
+                              />
+                            )}
+                          />
+                        </LocalizationProvider>
+                      </Box>
+                    )}
+                  />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   {/* 5 */}
-                  <CustomFormLabel
-                    sx={{
-                      mt: 0,
-                    }}
-                    htmlFor="text-email"
-                  >
-                    Email
-                  </CustomFormLabel>
-                  <CustomTextField
-                    id="text-email"
-                    value="info@modernize.com"
-                    variant="outlined"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  {/* 6 */}
-                  <CustomFormLabel
-                    sx={{
-                      mt: 0,
-                    }}
-                    htmlFor="text-phone"
-                  >
-                    Phone
-                  </CustomFormLabel>
-                  <CustomTextField
-                    id="text-phone"
-                    value="+91 12345 65478"
-                    variant="outlined"
-                    fullWidth
+                  <Controller
+                    control={control}
+                    name="role"
+                    render={({ field: { onChange, value } }) => (
+                      <Box>
+                        <CustomFormLabel
+                          sx={{
+                            mt: 0,
+                          }}
+                          htmlFor="role"
+                        >
+                          Role
+                        </CustomFormLabel>
+                        <CustomTextField
+                          value={roles[value]?.value}
+                          onChange={onChange}
+                          error={!!formErrors.role}
+                          helperText={formErrors.role && formErrors.role.message}
+                          variant="outlined"
+                          fullWidth
+                          disabled
+                        />
+                      </Box>
+                    )}
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  {/* 7 */}
+                  {/* 6 */}
+                  <Controller
+                    control={control}
+                    name="institution_id"
+                    render={() => (
+                      <Box width="100%">
+                        <CustomFormLabel
+                          sx={{
+                            mt: 0,
+                          }}
+                          htmlFor="institution"
+                        >
+                          Institution
+                        </CustomFormLabel>
+                        <CustomTextField
+                          value={institution?.name}
+                          error={!!formErrors?.institution_id}
+                          helperText={
+                            formErrors.institution_id && formErrors.institution_id.message
+                          }
+                          variant="outlined"
+                          fullWidth
+                          disabled
+                        />
+                      </Box>
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Box>
+                    <Controller
+                      control={control}
+                      name="is_social"
+                      render={({ field: { onChange, value } }) => (
+                        <Box width="100%">
+                          <CustomFormLabel sx={{ mt: 0 }} htmlFor="check-social">
+                            Have Social UUID:
+                          </CustomFormLabel>
+                          <FormControlLabel
+                            control={
+                              <CustomCheckbox
+                                checked={!!value} // Convert value to boolean
+                                onChange={(e) => onChange(e.target.checked)}
+                                name="is_social"
+                                color="primary"
+                              />
+                            }
+                            label="Check if user have Social UUID"
+                          />
+                        </Box>
+                      )}
+                    />
+
+                    {watch('is_social') && (
+                      <Controller
+                        control={control}
+                        name="social_uuid"
+                        render={({ field: { onChange, value } }) => (
+                          <Box>
+                            <CustomFormLabel
+                              sx={{
+                                mt: 0,
+                              }}
+                              htmlFor="social_uuid"
+                            >
+                              Social UUID
+                            </CustomFormLabel>
+                            <CustomTextField
+                              value={value}
+                              onChange={onChange}
+                              error={!!formErrors.social_uuid}
+                              helperText={formErrors.social_uuid && formErrors.social_uuid.message}
+                              variant="outlined"
+                              fullWidth
+                            />
+                          </Box>
+                        )}
+                      />
+                    )}
+                  </Box>
+                </Grid>
+                <Grid item xs={12}>
                   <CustomFormLabel
                     sx={{
                       mt: 0,
                     }}
-                    htmlFor="text-address"
+                    htmlFor="profile_pic"
                   >
-                    Address
+                    Profile picture
                   </CustomFormLabel>
-                  <CustomTextField
-                    id="text-address"
-                    value="814 Howard Street, 120065, India"
-                    variant="outlined"
-                    fullWidth
-                  />
+                  <Box textAlign="center" display="flex" justifyContent="center">
+                    <Controller
+                      control={control}
+                      name="profile_pic"
+                      render={({ field }) => (
+                        <Box>
+                          {profile_pic && Array.isArray(profile_pic) && profile_pic.length > 0 ? (
+                            <PreviewFile
+                              className={{ margin: '0 auto' }}
+                              width={120}
+                              height="120"
+                              files={profile_pic}
+                            />
+                          ) : (
+                            profile_pic &&
+                            typeof profile_pic === 'string' && (
+                              <img
+                                src={profile_pic}
+                                alt="profile image"
+                                width={120}
+                                height={120}
+                                style={{ margin: '0 auto' }}
+                              />
+                            )
+                          )}
+                          <Stack direction="row" justifyContent="center" spacing={2} my={3}>
+                            <Button variant="contained" color="primary" component="label">
+                              Upload
+                              <input
+                                id="images"
+                                type="file"
+                                hidden
+                                accept={allowedExts}
+                                ref={fileInputRef}
+                                onChange={(event) => {
+                                  const filesArray = Array.from(event.target.files);
+                                  field.onChange(filesArray);
+                                  setValue('profile_pic', filesArray);
+                                }}
+                              />
+                            </Button>
+                            <Button
+                              variant="outlined"
+                              color="error"
+                              onClick={() => setValue('profile_pic', [])}
+                            >
+                              Reset
+                            </Button>
+                          </Stack>
+                          <Typography variant="subtitle1" color="textSecondary" mb={4}>
+                            Validate file: [{allowedExts}]
+                          </Typography>
+                        </Box>
+                      )}
+                    />
+                  </Box>
                 </Grid>
               </Grid>
-            </form>
-          </CardContent>
-        </BlankCard>
-        <Stack direction="row" spacing={2} sx={{ justifyContent: 'end' }} mt={3}>
-          <Button size="large" variant="contained" color="primary">
-            Save
-          </Button>
-          <Button size="large" variant="text" color="error">
-            Cancel
-          </Button>
-        </Stack>
-      </Grid>
+            </CardContent>
+          </BlankCard>
+          <Stack direction="row" spacing={2} sx={{ justifyContent: 'end' }} mt={3}>
+            <Button size="large" variant="contained" color="primary" type="submit">
+              Save
+            </Button>
+            <Button size="large" variant="text" color="error" onClick={() => reset()}>
+              Cancel
+            </Button>
+          </Stack>
+        </Grid>
+      </form>
     </Grid>
   );
 };

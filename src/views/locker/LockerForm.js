@@ -51,14 +51,14 @@ const LockerForm = ({ handleSubmit, onSubmit, control, formErrors, reset }) => {
               <CustomTextField
                 select
                 value={value}
-                onChange={onChange}
+                onChange={(e) => onChange(Number(e.target.value))}
                 error={!!formErrors?.status}
                 helperText={formErrors.status && formErrors.status.message}
                 variant="outlined"
                 fullWidth
               >
                 {locker_status.map((status) => (
-                  <MenuItem key={status.id} value={status.value}>
+                  <MenuItem key={status.id} value={status.id}>
                     {status.value}
                   </MenuItem>
                 ))}
@@ -70,16 +70,16 @@ const LockerForm = ({ handleSubmit, onSubmit, control, formErrors, reset }) => {
         <Controller
           control={control}
           name="institution_id"
-          render={({ field: { onChange } }) => (
+          render={() => (
             <Box width="100%">
               <CustomFormLabel htmlFor="price">Institution</CustomFormLabel>
               <CustomTextField
                 value={institution?.name}
-                onChange={onChange}
                 error={!!formErrors.institution_id}
                 helperText={formErrors.institution_id && formErrors.institution_id.message}
                 variant="outlined"
                 fullWidth
+                disabled
               />
             </Box>
           )}

@@ -69,10 +69,10 @@ export const createLocker = createAsyncThunk(
 
 export const deleteLocker = createAsyncThunk(
   "locker/deleteLocker",
-  async ({locker_id}, { rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.delete(
-        `/api/v1/locker/delete/${locker_id}`
+        `/api/v1/locker/delete/${id}`
       );
       return response.data;
     } catch (error) {

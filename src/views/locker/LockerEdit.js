@@ -56,7 +56,7 @@ const LockerEdit = () => {
       reset({
         locker_number: locker?.locker_number || '',
         institution_id: locker?.institution_id || '',
-        status: locker_status[locker?.status]?.value|| '',
+        status: locker.status == 0 ? locker_status[0].id : locker_status[1].id || '',
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -76,6 +76,7 @@ const InstitutionTicketEdit = () => {
   }, [ticket]);
 
   const onSubmit = (data) => {
+    
     const ticketData = {
       ...data,
       institution_id: parseInt(data.institution_id, 10),
@@ -86,6 +87,7 @@ const InstitutionTicketEdit = () => {
       start_datetime: data.is_regular ? '' : data.start_datetime,
       end_datetime: data.is_regular ? '' : data.end_datetime,
     };
+    console.log(ticketData);
 
     dispatch(updateTicket({ ticket_id: id, ticketData }))
       .then(() => {

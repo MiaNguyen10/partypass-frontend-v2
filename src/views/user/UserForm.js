@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router';
 import CustomCheckbox from '../../components/forms/theme-elements/CustomCheckbox';
 import CustomFormLabel from '../../components/forms/theme-elements/CustomFormLabel';
 import CustomTextField from '../../components/forms/theme-elements/CustomTextField';
@@ -26,8 +25,6 @@ const UserForm = ({
   reset,
   fileInputRef,
 }) => {
-  const { pathname } = useLocation();
-
   const profile_pic = watch('profile_pic');
   const allowedExts = getAllowedExt('image');
   const institutions = useSelector(getInstitutions);
@@ -104,7 +101,7 @@ const UserForm = ({
           control={control}
           render={({ field: { onChange, value } }) => (
             <Box width="100%">
-              <CustomFormLabel htmlFor="status">Date of birth </CustomFormLabel>
+              <CustomFormLabel htmlFor="date_of_birth">Date of birth </CustomFormLabel>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   value={value || null}
@@ -173,26 +170,25 @@ const UserForm = ({
             </Box>
           )}
         />
-        {pathname.includes('create') && (
-          <Controller
-            control={control}
-            name="password"
-            render={({ field: { onChange, value } }) => (
-              <Box>
-                <CustomFormLabel htmlFor="password">Password</CustomFormLabel>
-                <CustomTextField
-                  type="password"
-                  value={value}
-                  onChange={onChange}
-                  error={!!formErrors.password}
-                  helperText={formErrors.password && formErrors.password.message}
-                  variant="outlined"
-                  fullWidth
-                />
-              </Box>
-            )}
-          />
-        )}
+
+        <Controller
+          control={control}
+          name="password"
+          render={({ field: { onChange, value } }) => (
+            <Box>
+              <CustomFormLabel htmlFor="password">Password</CustomFormLabel>
+              <CustomTextField
+                type="password"
+                value={value}
+                onChange={onChange}
+                error={!!formErrors.password}
+                helperText={formErrors.password && formErrors.password.message}
+                variant="outlined"
+                fullWidth
+              />
+            </Box>
+          )}
+        />
 
         <Controller
           control={control}

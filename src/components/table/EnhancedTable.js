@@ -27,6 +27,7 @@ import { IconSearch, IconTrash, IconFilePlus } from '@tabler/icons';
 // Replace these with your own components or MUI alternatives if needed.
 import CustomCheckbox from '../forms/theme-elements/CustomCheckbox';
 import CustomSwitch from '../forms/theme-elements/CustomSwitch';
+import FormDialog from './FormDialog';
 
 /** Helper functions for sorting **/
 function descendingComparator(a, b, orderBy) {
@@ -110,7 +111,7 @@ EnhancedTableHead.propTypes = {
 
 /** EnhancedTableToolbar component **/
 const EnhancedTableToolbar = (props) => {
-  const { numSelected, searchTerm, handleSearch, searchPlaceholder, handleCreateBtn } = props;
+  const { numSelected, searchTerm, handleSearch, searchPlaceholder, handleCreateBtn, handleDeleteBtn } = props;
 
   return (
     <Toolbar
@@ -157,7 +158,7 @@ const EnhancedTableToolbar = (props) => {
 
       {numSelected > 0 && (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={handleDeleteBtn}>
             <IconTrash width="18" />
           </IconButton>
         </Tooltip>
@@ -172,6 +173,7 @@ EnhancedTableToolbar.propTypes = {
   handleSearch: PropTypes.func.isRequired,
   searchPlaceholder: PropTypes.string,
   handleCreateBtn: PropTypes.func,
+  handleDeleteBtn: PropTypes.func,
 };
 
 /** The reusable EnhancedTable component **/
@@ -183,6 +185,7 @@ const EnhancedTable = ({
   searchPredicate,
   searchPlaceholder,
   handleCreateBtn,
+  keyDelete,
 }) => {
   // Sorting, pagination, selection, and density state
   const [order, setOrder] = useState('asc');
@@ -195,6 +198,7 @@ const EnhancedTable = ({
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState('');
   const [displayRows, setDisplayRows] = useState(rows);
+  const [openDialog , setOpenDialog] = useState(false);
 
   // Update the displayed rows if the parent-provided rows change
   useEffect(() => {
@@ -257,6 +261,11 @@ const EnhancedTable = ({
     setSelected(newSelected);
   };
 
+  //handle open delete dialog
+  const handleDeleteBtn = () => {
+    setOpenDialog(true);
+  };
+
   // Pagination handlers
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -282,6 +291,7 @@ const EnhancedTable = ({
         handleSearch={handleSearch}
         searchPlaceholder={searchPlaceholder}
         handleCreateBtn={handleCreateBtn}
+        handleDeleteBtn={handleDeleteBtn}
       />
       <Paper variant="outlined" sx={{ mx: 2, mt: 1 }}>
         <TableContainer>
@@ -353,6 +363,7 @@ const EnhancedTable = ({
           label="Dense padding"
         />
       </Box>
+      <FormDialog openDialog={openDialog} setOpenDialog={setOpenDialog} selected={selected} keyDelete={keyDelete} setSelected={setSelected}/>
     </Box>
   );
 };
@@ -365,6 +376,7 @@ EnhancedTable.propTypes = {
   searchPredicate: PropTypes.func,
   searchPlaceholder: PropTypes.string,
   handleCreateBtn: PropTypes.func,
+  keyDelete: PropTypes.string.isRequired,
 };
 
 export default EnhancedTable;

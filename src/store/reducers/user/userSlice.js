@@ -1,39 +1,47 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { loading_status } from "../../../config/Constant";
-import { createUser, getUserById, getUserInformation, getUserList, updateUser } from "../../thunk/user";
+import { createSlice } from '@reduxjs/toolkit';
+import { loading_status } from '../../../config/Constant';
+import {
+  createUser,
+  deleteUserById,
+  getUserById,
+  getUserInformation,
+  getUserList,
+  updateUser,
+  updateUserById,
+} from '../../thunk/user';
 
 const initialState = {
   users: [],
   loading: loading_status.idle,
   error: null,
   user: {
-    id: "",
-    name: "",
-    email: "",
-    phone: "",
-    role: "",
+    id: '',
+    name: '',
+    email: '',
+    phone: '',
+    role: '',
     is_social: false,
-    institution_id: "",
-    date_of_birth: "",
-    social_uuid: "",
-    profile_pic: "",
+    institution_id: '',
+    date_of_birth: '',
+    social_uuid: '',
+    profile_pic: '',
   },
   userLogin: {
-    user_id: "",
-    name: "",
-    email: "",
-    phone: "",
-    role: "",
+    user_id: '',
+    name: '',
+    email: '',
+    phone: '',
+    role: '',
     is_social: false,
-    institution_id: "",
-    date_of_birth: "",
-    social_uuid: "",
-    profile_pic: "",
-  }
+    institution_id: '',
+    date_of_birth: '',
+    social_uuid: '',
+    profile_pic: '',
+  },
 };
 
 const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -43,7 +51,7 @@ const userSlice = createSlice({
       })
       .addCase(getUserList.fulfilled, (state, action) => {
         state.loading = loading_status.succeeded;
-        state.users = action.payload
+        state.users = action.payload;
         state.error = null;
       })
       .addCase(getUserList.rejected, (state, action) => {
@@ -56,7 +64,7 @@ const userSlice = createSlice({
       })
       .addCase(getUserById.fulfilled, (state, action) => {
         state.loading = loading_status.succeeded;
-        state.user = action.payload
+        state.user = action.payload;
         state.error = null;
       })
       .addCase(getUserById.rejected, (state, action) => {
@@ -87,17 +95,41 @@ const userSlice = createSlice({
         state.loading = loading_status.failed;
         state.error = action.error.message;
       })
-      .addCase(updateUser.pending, (state) => {
+      .addCase(updateUserById.pending, (state) => {
         state.loading = loading_status.pending;
       })
-      .addCase(updateUser.fulfilled, (state, action) => {
+      .addCase(updateUserById.fulfilled, (state, action) => {
         state.users = state.users.map((user) =>
-          user === action.payload.id ? action.payload : user
+          user === action.payload.id ? action.payload : user,
         );
         state.loading = loading_status.succeeded;
         state.error = null;
       })
+      .addCase(updateUserById.rejected, (state, action) => {
+        state.loading = loading_status.failed;
+        state.error = action.error.message;
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.loading = loading_status.pending;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.loading = loading_status.succeeded;
+        state.error = null;
+      })
       .addCase(updateUser.rejected, (state, action) => {
+        state.loading = loading_status.failed;
+        state.error = action.error.message;
+      })
+      .addCase(deleteUserById.pending, (state) => {
+        state.loading = loading_status.pending;
+      })
+      .addCase(deleteUserById.fulfilled, (state, action) => {
+        state.users = state.users.filter((user) => user.id !== action.payload);
+        state.loading = loading_status.succeeded;
+        state.error = null;
+      })
+      .addCase(deleteUserById.rejected, (state, action) => {
         state.loading = loading_status.failed;
         state.error = action.error.message;
       });

@@ -52,7 +52,7 @@ const TableUserList = () => {
       numeric: false,
       disablePadding: false,
       label: 'Institution',
-      render: (row) => <Typography color="textSecondary">{row.institution_id ? row.institution_id : '-'}</Typography>,
+      render: (row) => <Typography color="textSecondary">{row.institution?.name ? row.institution?.name : '-'}</Typography>,
     },
     {
       id: 'action',
@@ -88,6 +88,7 @@ const TableUserList = () => {
         keyField="user_id"
         searchPlaceholder="Search user name"
         handleCreateBtn={handleCreateBtn}
+        keyDelete='user'
       />
     </div>
   );

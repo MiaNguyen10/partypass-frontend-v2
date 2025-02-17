@@ -48,12 +48,12 @@ return (
             <Controller
                 control={control}
                 name="institution_id"
-                render={({ field: { onChange } }) => (
+                render={({ field: { onChange, value } }) => (
                     <Box width="100%">
                         <CustomFormLabel htmlFor="status">Institution</CustomFormLabel>
                         <CustomTextField
                             select
-                            value={institution_id}
+                            value={value}
                             onChange={onChange}
                             error={!!formErrors?.institution_id}
                             helperText={formErrors.institution_id && formErrors.institution_id.message}
@@ -114,7 +114,7 @@ return (
                         <FormControlLabel
                             control={
                                 <CustomCheckbox
-                                    checked={value || false}
+                                    checked={!!value || false}
                                     onChange={(e) => onChange(e.target.checked)}
                                     name="is_regular"
                                     color="primary"

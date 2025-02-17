@@ -102,6 +102,7 @@ const TableTicketList = () => {
         keyField="id"
         searchPlaceholder="Search ticket name"
         handleCreateBtn={handleCreateBtn}
+        keyDelete='ticket'
       />
     </div>
   );

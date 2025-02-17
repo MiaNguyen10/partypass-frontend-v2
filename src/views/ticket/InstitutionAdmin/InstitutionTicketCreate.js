@@ -8,6 +8,8 @@ import Breadcrumb from '../../../layouts/full/shared/breadcrumb/Breadcrumb';
 import { createTicket } from '../../../store/thunk/ticket';
 import schemaTicket from '../schemaTicket';
 import InstitutionTicketForm from './InstitutionTicketForm';
+import { jwtDecode } from 'jwt-decode';
+import { useEffect } from 'react';
 
 const BCrumb = [
   {
@@ -25,6 +27,7 @@ const BCrumb = [
 
 const InstitutionTicketCreate = () => {
   const dispatch = useDispatch();
+  const { institution_id } = jwtDecode(sessionStorage.getItem('token'));
 
   const {
     handleSubmit,
@@ -48,16 +51,24 @@ const InstitutionTicketCreate = () => {
     },
   });
 
+  useEffect(() => {
+    if (institution_id) {
+      reset({
+        institution_id: institution_id,
+      });
+    }
+  }, [institution_id, reset]);
+
   const onSubmit = (data) => {
     const ticketData = {
       ...data,
-      institution_id: parseInt(data.institution_id, 10),
+      institution_id: parseInt(institution_id, 10),
       price: parseFloat(data.price),
       capacity: parseInt(data.capacity, 10),
       is_regular: data.is_regular ? 1 : 0,
-      date: data.is_regular ? "" : data.date,
-      start_datetime: data.is_regular ? "" : data.start_datetime,
-      end_datetime: data.is_regular ? "" : data.end_datetime,
+      date: data.is_regular ? '' : data.date,
+      start_datetime: data.is_regular ? '' : data.start_datetime,
+      end_datetime: data.is_regular ? '' : data.end_datetime,
     };
     dispatch(createTicket(ticketData));
     reset();

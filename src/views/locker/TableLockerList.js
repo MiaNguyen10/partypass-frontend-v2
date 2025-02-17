@@ -41,16 +41,16 @@ const TableLockerList = () => {
       label: 'Status',
       render: (row) => {
         let backgroundColor;
-        if (locker_status[row.status].value === 'Active') {
+        if (locker_status[row.status]?.value === 'Active') {
           backgroundColor = (theme) => theme.palette.success.light;
-        } else if (locker_status[row.status].value === 'Disabled') {
+        } else if (locker_status[row.status]?.value === 'Disabled') {
           backgroundColor = (theme) => theme.palette.error.light;
         }
         return (
           <Chip
             sx={{ backgroundColor }}
             size="small"
-            label={locker_status[row.status].value}
+            label={locker_status[row.status]?.value}
           />
         );
       },
@@ -89,6 +89,7 @@ const TableLockerList = () => {
         keyField="id"
         searchPlaceholder="Search locker"
         handleCreateBtn={handleCreateBtn}
+        keyDelete='locker'
       />
     </div>
   );
