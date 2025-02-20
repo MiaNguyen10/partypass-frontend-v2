@@ -1,5 +1,7 @@
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Button, IconButton, Stack, Typography } from '@mui/material';
+import { IconEye, IconEyeOff } from '@tabler/icons';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 import CustomFormLabel from '../../../components/forms/theme-elements/CustomFormLabel';
 import CustomTextField from '../../../components/forms/theme-elements/CustomTextField';
@@ -15,63 +17,75 @@ const AuthLogin = ({
   passwordErrorMessage,
   errorLogin,
   loading,
-}) => (
-  <>
-    {title ? (
-      <Typography fontWeight="700" variant="h3" mb={1}>
-        {title}
-      </Typography>
-    ) : null}
+}) => {
+  const [showPassword, setShowPassword] = React.useState(false);
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
-    {subtext}
-
-    {console.log('loading state', loading)}
-
-    <Stack component="form" onSubmit={handleSubmit}>
-      <Box>
-        <CustomFormLabel htmlFor="username">Username</CustomFormLabel>
-        <CustomTextField
-          id="username"
-          name="username"
-          variant="outlined"
-          error={usernameError}
-          helperText={usernameErrorMessage}
-          required
-          fullWidth
-        />
-      </Box>
-      <Box>
-        <CustomFormLabel htmlFor="password">Password</CustomFormLabel>
-        <CustomTextField
-          id="password"
-          name="password"
-          type="password"
-          variant="outlined"
-          error={passwordError}
-          helperText={passwordErrorMessage}
-          required
-          fullWidth
-        />
-      </Box>
-      {errorLogin && (
-        <Typography color="error" variant="body2" mt={2}>
-          {errorLogin}
+  return (
+    <>
+      {title ? (
+        <Typography fontWeight="700" variant="h3" mb={1}>
+          {title}
         </Typography>
-      )}
-      <Box mt={3}>
-        {loading === 'pending' ? (
-          <div style={{ width: '20px', height: '20px' }}>
-            <Spinner />
-          </div>
-        ) : (
-          <Button color="primary" variant="contained" size="large" fullWidth type="submit">
-            Sign In
-          </Button>
+      ) : null}
+
+      {subtext}
+
+      <Stack component="form" onSubmit={handleSubmit}>
+        <Box>
+          <CustomFormLabel htmlFor="username">Username</CustomFormLabel>
+          <CustomTextField
+            id="username"
+            name="username"
+            variant="outlined"
+            error={usernameError}
+            helperText={usernameErrorMessage}
+            required
+            fullWidth
+          />
+        </Box>
+        <Box>
+          <CustomFormLabel htmlFor="password">Password</CustomFormLabel>
+          <CustomTextField
+            id="password"
+            name="password"
+            type={showPassword ? 'text' : 'password'}
+            variant="outlined"
+            error={passwordError}
+            helperText={passwordErrorMessage}
+            required
+            fullWidth
+            InputProps={{
+              endAdornment: (
+                <IconButton size="small" onClick={handleClickShowPassword}>
+                  {showPassword ? <IconEye size="1.1rem" /> : <IconEyeOff size="1.1rem" />}
+                </IconButton>
+              ),
+            }}
+          />
+        </Box>
+        {errorLogin && (
+          <Typography color="error" variant="body2" mt={2}>
+            {errorLogin}
+          </Typography>
         )}
-      </Box>
-    </Stack>
-  </>
-);
+        <Box mt={3}>
+          {loading === 'pending' ? (
+            <div style={{ width: '20px', height: '20px' }}>
+              <Spinner />
+            </div>
+          ) : (
+            <Button color="primary" variant="contained" size="large" fullWidth type="submit">
+              Sign In
+            </Button>
+          )}
+        </Box>
+      </Stack>
+    </>
+  );
+};
 
 AuthLogin.propTypes = {
   title: PropTypes.string,
