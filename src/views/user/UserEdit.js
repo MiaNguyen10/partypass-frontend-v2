@@ -6,30 +6,38 @@ import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import Breadcrumb from '../../layouts/full/shared/breadcrumb/Breadcrumb';
-import { getUser } from '../../store/reducers/user/userSlice';
 import { getUserById, updateUserById } from '../../store/thunk/user';
 import schemaUser from './schemaUser';
 import UserForm from './UserForm';
 
 const BCrumb = [
-    {
-      to: '/',
-      title: 'Home',
-    },
-    {
-      to: '/users',
-      title: 'User List',
-    },
-    {
-      title: 'Edit',
-    },
-  ];
+  {
+    to: '/',
+    title: 'Home',
+  },
+  {
+    to: '/users',
+    title: 'User List',
+  },
+  {
+    title: 'Edit',
+  },
+];
 
 const UserEdit = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const user = useSelector(getUser);
+  const location = useLocation();
+  const getUserInformation = useSelector((state) => state.user);
+  const navigation = useNavigate();
+
+  const {
+    state: { user: locationUser },
+  } = location;
+
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -46,48 +54,71 @@ const UserEdit = () => {
   } = useForm({
     resolver: yupResolver(schemaUser),
     defaultValues: {
-        name: "",
-        email: "",
-        phone: "",
-        date_of_birth: dayjs(),
-        role: "",
-        institution_id: "",
-        is_social: false,
-        social_uuid: "",
-        profile_pic: [],
+      name: '',
+      email: '',
+      phone: '',
+      date_of_birth: dayjs(),
+      role: '',
+      institution_id: '',
+      is_social: false,
+      social_uuid: '',
+      profile_pic: null,
     },
   });
 
   useEffect(() => {
-    if (user) {
+    if (locationUser) {
       reset({
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        date_of_birth: dayjs(user.date_of_birth),
-        role: user.role,
-        institution_id: user.institution_id || '',
-        is_social: user.is_social,
-        social_uuid: user.social_uuid,
-        profile_pic: user.profile_pic || [],
+        name: locationUser.name,
+        email: locationUser.email,
+        phone: locationUser.phone,
+        date_of_birth: dayjs(locationUser.date_of_birth),
+        role: locationUser.role,
+        institution_id: locationUser.institution?.institution_id || '',
+        is_social: locationUser.is_social === 1,
+        social_uuid: locationUser.social_uuid,
+        profile_pic: locationUser.profile_pic || [],
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-
+  }, [locationUser]);
   const onSubmit = (data) => {
     const userData = {
       ...data,
       institution_id: parseInt(data.institution_id, 10),
       role: parseInt(data.role, 10),
-    }
-    dispatch(updateUserById({ user_id: id, userData: userData }))
+      is_social: data.is_social ? 1 : 0,
+    };
+
+    const formData = new FormData();
+
+    Object.keys(userData).forEach((key) => {
+      if (key === 'profile_pic') {
+        // Handle file uploads
+        if (Array.isArray(userData[key]) && userData[key].length > 0) {
+          userData[key].forEach((file) => {
+            formData.append(key, file);
+          });
+        }
+      } else {
+        formData.append(key, userData[key]);
+      }
+    });
+
+    dispatch(updateUserById({ user_id: id, userData: formData }))
       .then(() => {
         dispatch(getUserById({ user_id: id }));
-        // Reset the file input
         if (fileInputRef.current) {
-            fileInputRef.current.value = null;
-          }
+          fileInputRef.current.value = null;
+        }
+        Swal.fire({
+          icon: 'success',
+          title: 'User updated successfully',
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          navigation('/users');
+        });
       })
       .catch((error) => {
         console.error(error);
@@ -111,6 +142,7 @@ const UserEdit = () => {
             reset={reset}
             setValue={setValue}
             fileInputRef={fileInputRef}
+            pending={getUserInformation.loading === 'pending'}
           />
         </Grid>
       </Grid>

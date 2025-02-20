@@ -1,16 +1,17 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import { Box } from '@mui/system';
+import dayjs from 'dayjs';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
+import Swal from 'sweetalert2';
+import Breadcrumb from '../../../layouts/full/shared/breadcrumb/Breadcrumb';
 import { getTicket } from '../../../store/reducers/ticket/ticketSlice';
 import { getTicketById, updateTicket } from '../../../store/thunk/ticket';
 import schemaTicket from '../schemaTicket';
 import TicketForm from './TicketForm';
-import Breadcrumb from '../../../layouts/full/shared/breadcrumb/Breadcrumb';
-import dayjs from 'dayjs';
 
 const BCrumb = [
   {
@@ -30,6 +31,7 @@ const TicketEdit = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const ticket = useSelector(getTicket);
+  const navigation = useNavigate();
 
   useEffect(() => {
     dispatch(getTicketById(id));
@@ -90,6 +92,14 @@ const TicketEdit = () => {
     dispatch(updateTicket({ ticket_id: id, ticketData }))
       .then(() => {
         dispatch(getTicketById(id));
+        Swal.fire({
+          icon: 'success',
+          title: 'Ticket updated successfully',
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          navigation('/tickets');
+        });
       })
       .catch((error) => {
         console.error(error);

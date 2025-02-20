@@ -3,10 +3,10 @@ import { IconEye, IconPencil } from '@tabler/icons';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
+import EnhancedTable from '../../components/table/EnhancedTable';
 import { roles } from '../../config/Constant';
 import { getUsers } from '../../store/reducers/user/userSlice';
 import { getUserList } from '../../store/thunk/user';
-import EnhancedTable from '../../components/table/EnhancedTable';
 
 const TableUserList = () => {
   const dispatch = useDispatch();
@@ -41,18 +41,22 @@ const TableUserList = () => {
       render: (row) => <Typography color="textSecondary">{row.phone}</Typography>,
     },
     {
-        id: 'role',
-        numeric: false,
-        disablePadding: false,
-        label: 'Role',
-        render: (row) => <Typography color="textSecondary">{roles[row.role].value}</Typography>,
-      },
+      id: 'role',
+      numeric: false,
+      disablePadding: false,
+      label: 'Role',
+      render: (row) => <Typography color="textSecondary">{roles[row.role].value}</Typography>,
+    },
     {
       id: 'institution',
       numeric: false,
       disablePadding: false,
       label: 'Institution',
-      render: (row) => <Typography color="textSecondary">{row.institution?.name ? row.institution?.name : '-'}</Typography>,
+      render: (row) => (
+        <Typography color="textSecondary">
+          {row.institution?.name ? row.institution?.name : '-'}
+        </Typography>
+      ),
     },
     {
       id: 'action',
@@ -62,12 +66,18 @@ const TableUserList = () => {
       render: (row) => (
         <>
           <Tooltip title="View">
-            <IconButton size="small" onClick={() => navigate(`/users/${row.user_id}`)}>
+            <IconButton
+              size="small"
+              onClick={() => navigate(`/users/${row.user_id}`, { state: { user: row } })}
+            >
               <IconEye size="1.1rem" />
             </IconButton>
           </Tooltip>
           <Tooltip title="Edit">
-            <IconButton size="small" onClick={() => navigate(`/users/${row.user_id}/edit`)}>
+            <IconButton
+              size="small"
+              onClick={() => navigate(`/users/${row.user_id}/edit`, { state: { user: row } })}
+            >
               <IconPencil size="1.1rem" />
             </IconButton>
           </Tooltip>
@@ -88,7 +98,8 @@ const TableUserList = () => {
         keyField="user_id"
         searchPlaceholder="Search user name"
         handleCreateBtn={handleCreateBtn}
-        keyDelete='user'
+        keyDelete="user"
+        AddBtnTitle="Add New User"
       />
     </div>
   );

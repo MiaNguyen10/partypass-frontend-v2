@@ -1,10 +1,7 @@
+import { styled } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { ReactComponent as LogoDark } from 'src/assets/images/logos/dark-logo.svg';
-import { ReactComponent as LogoDarkRTL } from 'src/assets/images/logos/dark-rtl-logo.svg';
-import { ReactComponent as LogoLight } from 'src/assets/images/logos/light-logo.svg';
-import { ReactComponent as LogoLightRTL } from 'src/assets/images/logos/light-logo-rtl.svg';
-import { styled } from '@mui/material';
+import logo from 'src/assets/images/logos/partypass-logo.svg';
 
 const Logo = () => {
   const customizer = useSelector((state) => state.customizer);
@@ -17,27 +14,49 @@ const Logo = () => {
 
   if (customizer.activeDir === 'ltr') {
     return (
-      <LinkStyled to="/" style={{
-        display: 'flex',
-        alignItems: 'center',
-      }}>
+      <LinkStyled
+        to="/"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
         {customizer.activeMode === 'dark' ? (
-          <LogoLight />
+          <img
+            src={logo}
+            width={customizer.isCollapse ? '40px' : '180px'}
+            height={customizer.TopbarHeight}
+          />
         ) : (
-          <LogoDark />
+          <img
+            src={logo}
+            width={customizer.isCollapse ? '40px' : '180px'}
+            height={customizer.TopbarHeight}
+          />
         )}
       </LinkStyled>
     );
   }
   return (
-    <LinkStyled to="/" style={{
-      display: 'flex',
-      alignItems: 'center',
-    }}>
+    <LinkStyled
+      to="/"
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+      }}
+    >
       {customizer.activeMode === 'dark' ? (
-        <LogoDarkRTL />
+        <img
+          src={logo}
+          width={customizer.isCollapse ? '40px' : '180px'}
+          height={customizer.TopbarHeight}
+        />
       ) : (
-        <LogoLightRTL />
+        <img
+          src={logo}
+          width={customizer.isCollapse ? '40px' : '180px'}
+          height={customizer.TopbarHeight}
+        />
       )}
     </LinkStyled>
   );

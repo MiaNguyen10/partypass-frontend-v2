@@ -1,8 +1,11 @@
-import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import {
   Box,
+  Button,
+  FormControlLabel,
+  IconButton,
+  InputAdornment,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -11,18 +14,16 @@ import {
   TablePagination,
   TableRow,
   TableSortLabel,
-  Toolbar,
-  Typography,
   TextField,
-  InputAdornment,
-  IconButton,
+  Toolbar,
   Tooltip,
-  FormControlLabel,
-  Stack,
+  Typography,
 } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { visuallyHidden } from '@mui/utils';
-import { IconSearch, IconTrash, IconFilePlus } from '@tabler/icons';
+import { IconFilePlus, IconSearch, IconTrash } from '@tabler/icons';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 
 // Replace these with your own components or MUI alternatives if needed.
 import CustomCheckbox from '../forms/theme-elements/CustomCheckbox';
@@ -111,7 +112,15 @@ EnhancedTableHead.propTypes = {
 
 /** EnhancedTableToolbar component **/
 const EnhancedTableToolbar = (props) => {
-  const { numSelected, searchTerm, handleSearch, searchPlaceholder, handleCreateBtn, handleDeleteBtn } = props;
+  const {
+    numSelected,
+    searchTerm,
+    handleSearch,
+    searchPlaceholder,
+    handleCreateBtn,
+    handleDeleteBtn,
+    AddBtnTitle,
+  } = props;
 
   return (
     <Toolbar
@@ -148,11 +157,15 @@ const EnhancedTableToolbar = (props) => {
             onChange={handleSearch}
             value={searchTerm}
           />
-          <Tooltip title="Create">
-            <IconButton size="small" onClick={handleCreateBtn}>
-              <IconFilePlus size="1.1rem" />
-            </IconButton>
-          </Tooltip>
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <Button
+              variant="text"
+              startIcon={<IconFilePlus size="1.8rem" />}
+              onClick={handleCreateBtn}
+            >
+              {AddBtnTitle}
+            </Button>
+          </Stack>
         </Stack>
       )}
 
@@ -172,6 +185,7 @@ EnhancedTableToolbar.propTypes = {
   searchTerm: PropTypes.string.isRequired,
   handleSearch: PropTypes.func.isRequired,
   searchPlaceholder: PropTypes.string,
+  AddBtnTitle: PropTypes.string,
   handleCreateBtn: PropTypes.func,
   handleDeleteBtn: PropTypes.func,
 };
@@ -186,6 +200,7 @@ const EnhancedTable = ({
   searchPlaceholder,
   handleCreateBtn,
   keyDelete,
+  AddBtnTitle,
 }) => {
   // Sorting, pagination, selection, and density state
   const [order, setOrder] = useState('asc');
@@ -198,7 +213,7 @@ const EnhancedTable = ({
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState('');
   const [displayRows, setDisplayRows] = useState(rows);
-  const [openDialog , setOpenDialog] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
 
   // Update the displayed rows if the parent-provided rows change
   useEffect(() => {
@@ -292,6 +307,7 @@ const EnhancedTable = ({
         searchPlaceholder={searchPlaceholder}
         handleCreateBtn={handleCreateBtn}
         handleDeleteBtn={handleDeleteBtn}
+        AddBtnTitle={AddBtnTitle}
       />
       <Paper variant="outlined" sx={{ mx: 2, mt: 1 }}>
         <TableContainer>
@@ -312,6 +328,7 @@ const EnhancedTable = ({
                   const id = row[keyField];
                   const isItemSelected = isSelected(id);
                   const labelId = `enhanced-table-checkbox-${index}`;
+
                   return (
                     <TableRow
                       hover
@@ -363,7 +380,13 @@ const EnhancedTable = ({
           label="Dense padding"
         />
       </Box>
-      <FormDialog openDialog={openDialog} setOpenDialog={setOpenDialog} selected={selected} keyDelete={keyDelete} setSelected={setSelected}/>
+      <FormDialog
+        openDialog={openDialog}
+        setOpenDialog={setOpenDialog}
+        selected={selected}
+        keyDelete={keyDelete}
+        setSelected={setSelected}
+      />
     </Box>
   );
 };
@@ -377,6 +400,7 @@ EnhancedTable.propTypes = {
   searchPlaceholder: PropTypes.string,
   handleCreateBtn: PropTypes.func,
   keyDelete: PropTypes.string.isRequired,
+  AddBtnTitle: PropTypes.string,
 };
 
 export default EnhancedTable;

@@ -1,18 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit';
-import CustomizerReducer from './customizer/CustomizerSlice';
+import BlogReducer from './apps/blog/BlogSlice';
 import ChatsReducer from './apps/chat/ChatSlice';
-import NotesReducer from './apps/notes/NotesSlice';
-import EmailReducer from './apps/email/EmailSlice';
 import ContactsReducer from './apps/contacts/ContactSlice';
 import EcommerceReducer from './apps/eCommerce/EcommerceSlice';
+import EmailReducer from './apps/email/EmailSlice';
+import NotesReducer from './apps/notes/NotesSlice';
 import UserProfileReducer from './apps/userProfile/UserProfileSlice';
-import BlogReducer from './apps/blog/BlogSlice';
+import CustomizerReducer from './customizer/CustomizerSlice';
 import AuthenticateReducer from './reducers/authenticate/authenticateSlice';
-import TicketReducer from "./reducers/ticket/ticketSlice";
-import InstitutionReducer from "./reducers/institution/institutionSlice";
-import UserReducer from "./reducers/user/userSlice";
-import LockerReducer from "./reducers/locker/lockerSlice";
-import PurchaseReducer from "./reducers/purchase/purchaseSlice";
+import dashboardReducer from './reducers/dashboard/dashboardSlice';
+import InstitutionReducer from './reducers/institution/institutionSlice';
+import LockerReducer from './reducers/locker/lockerSlice';
+import PurchaseReducer from './reducers/purchase/purchaseSlice';
+import TicketReducer from './reducers/ticket/ticketSlice';
+import UserReducer from './reducers/user/userSlice';
 
 export const store = configureStore({
   reducer: {
@@ -30,6 +31,7 @@ export const store = configureStore({
     user: UserReducer,
     locker: LockerReducer,
     purchase: PurchaseReducer,
+    dashboard: dashboardReducer,
   },
 });
 

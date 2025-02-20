@@ -1,25 +1,14 @@
-import React from 'react';
-import { Box, CardContent, Chip, Paper, Stack, Typography, LinearProgress } from '@mui/material';
+import { Box, CardContent, Chip, LinearProgress, Paper, Stack, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { useSelector } from 'react-redux';
 import SavingsImg from '../../../assets/images/backgrounds/piggy.png';
-
-const sells = [
-  {
-    product: 'MaterialPro',
-    price: '23,568',
-    percent: 55,
-    color: 'primary',
-  },
-  {
-    product: 'Flexy Admin',
-    price: '23,568',
-    percent: 20,
-    color: 'secondary',
-  },
-];
+import { getAnalytics } from '../../../store/reducers/dashboard/dashboardSlice';
 
 const SellingProducts = () => {
   const theme = useTheme();
+  const analytics = useSelector(getAnalytics);
+  const bestSellingProducts = analytics.bestSellingProducts;
+
   const secondarylight = theme.palette.secondary.light;
   const primarylight = theme.palette.primary.light;
   const secondary = theme.palette.secondary.main;
@@ -32,9 +21,9 @@ const SellingProducts = () => {
         <Typography variant="h5" color="white">
           Best selling products
         </Typography>
-        <Typography variant="subtitle1" color="white" mb={4}>
+        {/* <Typography variant="subtitle1" color="white" mb={4}>
           Overview 2023
-        </Typography>
+        </Typography> */}
 
         <Box textAlign="center" mt={2} mb="-90px">
           <img src={SavingsImg} alt={SavingsImg} width={'300px'} />
@@ -43,7 +32,7 @@ const SellingProducts = () => {
       <Paper sx={{ overflow: 'hidden', zIndex: '1', position: 'relative', margin: '10px' }}>
         <Box p={3}>
           <Stack spacing={3}>
-            {sells.map((sell, i) => (
+            {bestSellingProducts.map((product, i) => (
               <Box key={i}>
                 <Stack
                   direction="row"
@@ -53,23 +42,27 @@ const SellingProducts = () => {
                   alignItems="center"
                 >
                   <Box>
-                    <Typography variant="h6">{sell.product}</Typography>
+                    <Typography variant="h6">{product.ticketName}</Typography>
                     <Typography variant="subtitle2" color="textSecondary">
-                      ${sell.price}
+                      ${product.totalRevenue}
                     </Typography>
                   </Box>
                   <Chip
                     sx={{
-                      backgroundColor: sell.color === 'primary' ? primarylight : secondarylight,
-                      color: sell.color === 'primary' ? primary : secondary,
+                      backgroundColor: i % 2 === 0 ? primarylight : secondarylight,
+                      color: i % 2 === 0 ? primary : secondary,
                       borderRadius: '4px',
                       width: 55,
                       height: 24,
                     }}
-                    label={sell.percent + '%'}
+                    label={product.totalSold + ' sold'}
                   />
                 </Stack>
-                <LinearProgress value={sell.percent} variant="determinate" color={sell.color} />
+                <LinearProgress
+                  value={(product.totalSold / 10) * 100}
+                  variant="determinate"
+                  color={i % 2 === 0 ? 'primary' : 'secondary'}
+                />
               </Box>
             ))}
           </Stack>

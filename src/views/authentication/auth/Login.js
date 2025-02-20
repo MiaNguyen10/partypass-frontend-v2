@@ -1,17 +1,18 @@
 import { Box, Grid, Typography } from '@mui/material';
-import img1 from 'src/assets/images/backgrounds/login-bg.svg';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
+import img1 from 'src/assets/images/backgrounds/login-bg.png';
 import PageContainer from 'src/components/container/PageContainer';
 import Logo from 'src/layouts/full/shared/logo/Logo';
-import AuthLogin from '../authForms/AuthLogin';
-import React from 'react';
 import { passwordRegExp } from '../../../config/regexFormat';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router';
 import { authenticate } from '../../../store/thunk/authenticate';
+import AuthLogin from '../authForms/AuthLogin';
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const loading = useSelector((state) => state.auth.loading);
   const [usernameError, setUsernameError] = React.useState(false);
   const [usernameErrorMessage, setUsernameErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
@@ -31,7 +32,7 @@ const Login = () => {
         .then((response) => {
           sessionStorage.setItem('token', response.token);
           navigate('/');
-        })  
+        })
         .catch((error) => {
           setErrorLogin(`Login failed. ${error.message}`);
         });
@@ -140,6 +141,7 @@ const Login = () => {
               passwordError={passwordError}
               passwordErrorMessage={passwordErrorMessage}
               errorLogin={errorLogin}
+              loading={loading}
             />
           </Box>
         </Grid>
