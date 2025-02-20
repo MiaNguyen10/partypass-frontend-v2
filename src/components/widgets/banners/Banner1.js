@@ -1,6 +1,5 @@
-import React from 'react';
-import { Card, CardContent, Typography, Button, Box, Grid } from '@mui/material';
-import trackBg from 'src/assets/images/backgrounds/login-bg.svg';
+import { Box, Button, Card, CardContent, Grid, Typography } from '@mui/material';
+import trackBg from 'src/assets/images/backgrounds/login-bg.png';
 
 const Banner1 = () => {
   return (

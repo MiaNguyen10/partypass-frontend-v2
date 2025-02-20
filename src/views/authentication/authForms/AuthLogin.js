@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import CustomFormLabel from '../../../components/forms/theme-elements/CustomFormLabel';
 import CustomTextField from '../../../components/forms/theme-elements/CustomTextField';
+import Spinner from '../../../views/spinner/Loader'; // Import your spinner component
 
 const AuthLogin = ({
   title,
@@ -13,6 +14,7 @@ const AuthLogin = ({
   passwordError,
   passwordErrorMessage,
   errorLogin,
+  loading,
 }) => (
   <>
     {title ? (
@@ -22,6 +24,8 @@ const AuthLogin = ({
     ) : null}
 
     {subtext}
+
+    {console.log('loading state', loading)}
 
     <Stack component="form" onSubmit={handleSubmit}>
       <Box>
@@ -55,13 +59,20 @@ const AuthLogin = ({
         </Typography>
       )}
       <Box mt={3}>
-        <Button color="primary" variant="contained" size="large" fullWidth type="submit">
-          Sign In
-        </Button>
+        {loading === 'pending' ? (
+          <div style={{ width: '20px', height: '20px' }}>
+            <Spinner />
+          </div>
+        ) : (
+          <Button color="primary" variant="contained" size="large" fullWidth type="submit">
+            Sign In
+          </Button>
+        )}
       </Box>
     </Stack>
   </>
 );
+
 AuthLogin.propTypes = {
   title: PropTypes.string,
   subtext: PropTypes.node,
@@ -71,6 +82,7 @@ AuthLogin.propTypes = {
   passwordError: PropTypes.bool,
   passwordErrorMessage: PropTypes.string,
   errorLogin: PropTypes.string,
+  loading: PropTypes.string, // Change to bool
 };
 
 export default AuthLogin;

@@ -9,10 +9,10 @@ import { IconMail } from '@tabler/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import ProfileImg from 'src/assets/images/profile/user-1.jpg';
 import Scrollbar from 'src/components/custom-scroll/Scrollbar';
-import { getUserLogin } from '../../../../store/reducers/user/userSlice';
-import { getUserInformation } from '../../../../store/thunk/user';
 import { roles } from '../../../../config/Constant';
 import { logout } from '../../../../store/reducers/authenticate/authenticateSlice';
+import { getUserLogin } from '../../../../store/reducers/user/userSlice';
+import { getUserInformation } from '../../../../store/thunk/user';
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ const Profile = () => {
   const handleLogout = () => {
     dispatch(logout());
     navigate('/auth/login');
-  }
+  };
 
   return (
     <Box>
@@ -92,6 +92,16 @@ const Profile = () => {
                 <Typography variant="subtitle2" color="textSecondary">
                   {roles.find((role) => role.id === currentUser.role)?.value}
                 </Typography>
+
+                {(currentUser.role === 2 || currentUser.role === 3) && currentUser.institution && (
+                  <Typography
+                    variant="subtitle2"
+                    color="grey"
+                    sx={{ fontStyle: 'italic', fontSize: '0.85rem' }}
+                  >
+                    {currentUser.institution.name}
+                  </Typography>
+                )}
                 <Typography
                   variant="subtitle2"
                   color="textSecondary"

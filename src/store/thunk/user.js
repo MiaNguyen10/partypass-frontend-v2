@@ -47,7 +47,7 @@ export const updateUserById = createAsyncThunk(
   'user/updateUserById',
   async ({ user_id, userData }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.put(`/api/v1/users/update-user/${user_id}`, userData);
+      const response = await axiosInstance.patch(`/api/v1/users/update-user/${user_id}`, userData);
       return response.data;
     } catch (error) {
       if (!error.response) {
@@ -62,7 +62,7 @@ export const uploadProfilePicture = createAsyncThunk(
   'user/uploadProfilePicture',
   async ({ profile_pic }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.put(
+      const response = await axiosInstance.patch(
         `/api/v1/users/profile/upload-profile-picture`,
         profile_pic,
       );
@@ -107,12 +107,10 @@ export const updateUser = createAsyncThunk(
 );
 
 export const deleteUserById = createAsyncThunk(
-  "user/deleteUserById",
+  'user/deleteUserById',
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.delete(
-        `/api/v1/users/delete-user/${id}`
-      );
+      const response = await axiosInstance.delete(`/api/v1/users/delete-user/${id}`);
       return response.data;
     } catch (error) {
       if (!error.response) {
@@ -120,5 +118,5 @@ export const deleteUserById = createAsyncThunk(
       }
       return rejectWithValue(error.response.data);
     }
-  }
+  },
 );

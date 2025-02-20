@@ -1,49 +1,41 @@
-import React from 'react';
-import DashboardCard from '../../shared/DashboardCard';
-import CustomSelect from '../../forms/theme-elements/CustomSelect';
 import {
-  MenuItem,
-  Typography,
-  Box,
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow,
-  Avatar,
-  Chip,
-  TableContainer,
-  Stack,
+  Typography,
 } from '@mui/material';
-import TopPerformerData from './TopPerformerData';
-
-const performers = TopPerformerData;
+import { useSelector } from 'react-redux';
+import { getAnalytics } from '../../../store/reducers/dashboard/dashboardSlice';
+import DashboardCard from '../../shared/DashboardCard';
 
 const TopPerformers = () => {
   // for select
-  const [month, setMonth] = React.useState('1');
+  // const [month, setMonth] = React.useState('1');
+  const analytics = useSelector(getAnalytics);
 
-  const handleChange = (event) => {
-    setMonth(event.target.value);
-  };
+  // const handleChange = (event) => {
+  //   setMonth(event.target.value);
+  // };
 
   return (
     <DashboardCard
-      title="Top Projects"
-      subtitle="Best Products"
-      action={
-        <CustomSelect
-          labelId="month-dd"
-          id="month-dd"
-          size="small"
-          value={month}
-          onChange={handleChange}
-        >
-          <MenuItem value={1}>March 2022</MenuItem>
-          <MenuItem value={2}>April 2022</MenuItem>
-          <MenuItem value={3}>May 2022</MenuItem>
-        </CustomSelect>
-      }
+      title="Upcoming Events"
+      // action={
+      //   <CustomSelect
+      //     labelId="month-dd"
+      //     id="month-dd"
+      //     size="small"
+      //     value={month}
+      //     onChange={handleChange}
+      //   >
+      //     <MenuItem value={1}>March 2022</MenuItem>
+      //     <MenuItem value={2}>April 2022</MenuItem>
+      //     <MenuItem value={3}>May 2022</MenuItem>
+      //   </CustomSelect>
+      // }
     >
       <TableContainer>
         <Table
@@ -55,71 +47,52 @@ const TopPerformers = () => {
           <TableHead>
             <TableRow>
               <TableCell>
-                <Typography variant="subtitle2" fontWeight={600}>Assigned</Typography>
+                <Typography variant="subtitle2" fontWeight={600}>
+                  Name
+                </Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="subtitle2" fontWeight={600}>Project</Typography>
+                <Typography variant="subtitle2" fontWeight={600}>
+                  Date
+                </Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="subtitle2" fontWeight={600}>Priority</Typography>
+                <Typography variant="subtitle2" fontWeight={600}>
+                  Venue
+                </Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="subtitle2" fontWeight={600}>Budget</Typography>
+                <Typography variant="subtitle2" fontWeight={600}>
+                  Ticket Price
+                </Typography>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {performers.map((basic) => (
-              <TableRow key={basic.id}>
-                <TableCell>
-                  <Stack direction="row" spacing={2}>
-                    <Avatar src={basic.imgsrc} alt={basic.imgsrc} sx={{ width: 40, height: 40 }} />
-                    <Box>
-                      <Typography variant="subtitle2" fontWeight={600}>
-                        {basic.name}
-                      </Typography>
-                      <Typography color="textSecondary" fontSize="12px" variant="subtitle2">
-                        {basic.post}
-                      </Typography>
-                    </Box>
-                  </Stack>
-                </TableCell>
-                <TableCell>
-                  <Typography color="textSecondary" variant="subtitle2" fontWeight={400}>
-                    {basic.pname}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  {/* <Chip chipcolor={basic.status == 'Active' ? 'success' : basic.status == 'Pending' ? 'warning' : basic.status == 'Completed' ? 'primary' : basic.status == 'Cancel' ? 'error' : 'secondary'} */}
-                  <Chip
-                    sx={{
-                      bgcolor:
-                        basic.status === 'High'
-                          ? (theme) => theme.palette.error.light
-                          : basic.status === 'Medium'
-                          ? (theme) => theme.palette.warning.light
-                          : basic.status === 'Low'
-                          ? (theme) => theme.palette.success.light
-                          : (theme) => theme.palette.secondary.light,
-                      color:
-                        basic.status === 'High'
-                          ? (theme) => theme.palette.error.main
-                          : basic.status === 'Medium'
-                          ? (theme) => theme.palette.warning.main
-                          : basic.status === 'Low'
-                          ? (theme) => theme.palette.success.main
-                          : (theme) => theme.palette.secondary.main,
-                      borderRadius: '8px',
-                    }}
-                    size="small"
-                    label={basic.status}
-                  />
-                </TableCell>
-                <TableCell>
-                  <Typography variant="subtitle2">${basic.budget}k</Typography>
-                </TableCell>
-              </TableRow>
-            ))}
+            {analytics &&
+              analytics.upcomingEvents &&
+              analytics.upcomingEvents.map((event, index) => (
+                <TableRow key={index}>
+                  <TableCell>
+                    <Typography variant="subtitle2" fontWeight={600}>
+                      {event.eventName}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography color="textSecondary" variant="subtitle2" fontWeight={400}>
+                      {new Date(event.eventDate).toLocaleDateString()}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography color="textSecondary" variant="subtitle2" fontWeight={400}>
+                      {event.venue}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="subtitle2">${event.ticketPrice}</Typography>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>

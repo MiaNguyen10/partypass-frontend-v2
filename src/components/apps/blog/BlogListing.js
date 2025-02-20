@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
 import { Grid, Pagination } from '@mui/material';
-import BlogCard from './BlogCard';
 import { orderBy } from 'lodash';
-import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchBlogPosts } from 'src/store/apps/blog/BlogSlice';
+import BlogCard from './BlogCard';
 import BlogFeaturedCard from './BlogFeaturedCard';
 
 const BlogListing = () => {
@@ -13,7 +13,7 @@ const BlogListing = () => {
     dispatch(fetchBlogPosts());
   }, [dispatch]);
 
-  const filterBlogs = (posts, sortBy, cSearch) => {
+  const filterBlogs = (posts, sortBy) => {
     // SORT BY
 
     if (sortBy === 'newest') {

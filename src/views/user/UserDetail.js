@@ -1,15 +1,10 @@
 import { Box, CardContent, Typography } from '@mui/material';
 import { Stack, styled } from '@mui/system';
 import dayjs from 'dayjs';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import BlankCard from '../../components/shared/BlankCard';
 import { roles } from '../../config/Constant';
-import { getUser } from '../../store/reducers/user/userSlice';
-import { getUserById } from '../../store/thunk/user';
-import PreviewFile from '../institution/PreviewFile';
 
 const DetailTypo = styled(Typography)(({ theme }) => ({
   color: theme.palette.black,
@@ -17,13 +12,10 @@ const DetailTypo = styled(Typography)(({ theme }) => ({
 }));
 
 const UserDetail = () => {
-  const dispatch = useDispatch();
-  const { id } = useParams();
-  const user = useSelector(getUser);
-
-  useEffect(() => {
-    dispatch(getUserById({ user_id: id }));
-  }, [dispatch, id]);
+  const location = useLocation();
+  const {
+    state: { user: userInformatioin },
+  } = location;
 
   const BCrumb = [
     {
@@ -52,49 +44,52 @@ const UserDetail = () => {
               color="inherit"
               sx={{ textDecoration: 'none' }}
             >
-              {user?.name}
+              {userInformatioin?.name}
             </Typography>
           </Box>
           <Stack direction="row" gap={6} alignItems="center" my={2}>
             <DetailTypo>
-              <strong>DOB:</strong> {dayjs(user.date_of_birth).format('DD/MM/YYYY')}
+              <strong>DOB:</strong> {dayjs(userInformatioin.date_of_birth).format('DD/MM/YYYY')}
             </DetailTypo>
             <DetailTypo>
-              <strong>Email:</strong> {user?.email}
+              <strong>Email:</strong> {userInformatioin?.email}
             </DetailTypo>
             <DetailTypo>
-              <strong>Phone:</strong> {user?.phone}
+              <strong>Phone:</strong> {userInformatioin?.phone}
             </DetailTypo>
           </Stack>
           <Stack direction="row" gap={6} alignItems="center" my={2}>
             <DetailTypo>
-              <strong>Role: </strong> {user?.role && roles[user?.role]?.value}
+              <strong>Role: </strong>{' '}
+              {userInformatioin?.role && roles[userInformatioin?.role]?.value}
             </DetailTypo>
           </Stack>
-          {user?.institution_id && (
+          {userInformatioin?.institution_id && (
             <Stack direction="row" gap={6} alignItems="center" my={2}>
               <DetailTypo>
-                <strong>Institution: </strong> {user?.institution_id}
+                <strong>Institution: </strong> {userInformatioin?.institution_id}
               </DetailTypo>
             </Stack>
           )}
           <Stack direction="row" gap={6} alignItems="center" my={2}>
             <DetailTypo>
               <strong>Social ID: </strong>
-              {user.is_social ? user?.social_uuid : `No Social ID`}
+              {userInformatioin.is_social ? userInformatioin?.social_uuid : `No Social ID`}
             </DetailTypo>
           </Stack>
           <Stack direction="row" gap={6} alignItems="center" my={2}>
             <DetailTypo>
               <strong>Profile picture: </strong>
             </DetailTypo>
-            {user?.profile_pic && user?.profile_pic?.length > 0 && (
-              <PreviewFile
-                className={{ margin: 'auto' }}
-                width={300}
-                height={'auto'}
-                files={user.profile_pic}
-              />
+            {console.log('profile_pic', userInformatioin?.profile_pic)}
+            {userInformatioin?.profile_pic && (
+              // <PreviewFile
+              //   className={{ margin: 'auto' }}
+              //   width={300}
+              //   height={'auto'}
+              //   files={[userInformatioin.profile_pic]}
+              // />
+              <img src={userInformatioin.profile_pic} alt="profile picture" width={200} />
             )}
           </Stack>
         </CardContent>

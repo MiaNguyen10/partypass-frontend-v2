@@ -4,9 +4,11 @@ import { Box } from '@mui/system';
 import { jwtDecode } from 'jwt-decode';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
+import Swal from 'sweetalert2';
 import Breadcrumb from '../../../layouts/full/shared/breadcrumb/Breadcrumb';
 import { createTicket } from '../../../store/thunk/ticket';
-import schemaLocker from '../../locker/schemaLocker';
+import schemaTicket from '../schemaTicket';
 import TicketForm from './TicketForm';
 
 const BCrumb = [
@@ -26,6 +28,7 @@ const BCrumb = [
 const TicketCreate = () => {
   const dispatch = useDispatch();
   const { institution_id } = jwtDecode(sessionStorage.getItem('token'));
+  const navigation = useNavigate();
 
   const {
     handleSubmit,
@@ -34,11 +37,16 @@ const TicketCreate = () => {
     reset,
     watch,
   } = useForm({
-    resolver: yupResolver(schemaLocker),
+    resolver: yupResolver(schemaTicket),
     defaultValues: {
       locker_number: '',
+      price: 0,
+      capacity: 0,
+      is_regular: false,
+      date: '',
+      start_datetime: '',
+      end_datetime: '',
       institution_id: '',
-      status: '',
     },
   });
 
@@ -53,9 +61,20 @@ const TicketCreate = () => {
       start_datetime: data.is_regular ? '' : data.start_datetime,
       end_datetime: data.is_regular ? '' : data.end_datetime,
     };
-    dispatch(createTicket(ticketData)).catch((error) => {
-      console.log(error);
-    });
+    dispatch(createTicket(ticketData))
+      .then(() => {
+        Swal.fire({
+          icon: 'success',
+          title: 'New ticket created successfully',
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          navigation('/tickets');
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     reset();
   };
 

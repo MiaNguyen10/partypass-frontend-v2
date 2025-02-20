@@ -4,9 +4,11 @@ import { Box } from '@mui/system';
 import dayjs from 'dayjs';
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
+import Swal from 'sweetalert2';
 import Breadcrumb from '../../layouts/full/shared/breadcrumb/Breadcrumb';
-import { createUser, uploadProfilePicture } from '../../store/thunk/user';
+import { createUser } from '../../store/thunk/user';
 import schemaUser from './schemaUser';
 import UserForm from './UserForm';
 
@@ -27,6 +29,8 @@ const BCrumb = [
 const UserCreate = () => {
   const dispatch = useDispatch();
   const fileInputRef = useRef(null);
+  const getUserInformation = useSelector((state) => state.user);
+  const navigation = useNavigate();
 
   const {
     handleSubmit,
@@ -54,7 +58,6 @@ const UserCreate = () => {
   const onSubmit = (data) => {
     // Create a FormData object
     const formData = new FormData();
-    const formImg = new FormData();
 
     // Convert numeric and boolean fields
     formData.append('name', data.name);
@@ -63,21 +66,31 @@ const UserCreate = () => {
     formData.append('date_of_birth', data.date_of_birth.toISOString());
     formData.append('password', data.password);
     formData.append('role', parseInt(data.role, 10));
-    formData.append('institution_id', parseInt(data.institution_id, 10));
+    formData.append(
+      'institution_id',
+      data.institution_id ? parseInt(data.institution_id, 10) : null,
+    );
     formData.append('is_social', data.is_social ? 1 : 0);
     formData.append('social_uuid', data.social_uuid);
 
     // Append the image file
     if (data.profile_pic && data.profile_pic[0]) {
-      formImg.append('profile_pic', data.profile_pic[0]);
+      formData.append('profile_pic', data.profile_pic[0]);
     }
 
-    dispatch(createUser({ userData: formData })),
-      dispatch(uploadProfilePicture({ profile_pic: formImg })).then(() => {
-        if (fileInputRef.current) {
-          fileInputRef.current.value = null;
-        }
+    dispatch(createUser({ userData: formData })).then(() => {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = null;
+      }
+      Swal.fire({
+        icon: 'success',
+        title: 'New user added successfully',
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        navigation('/users');
       });
+    });
     reset();
   };
 
@@ -98,6 +111,7 @@ const UserCreate = () => {
             setValue={setValue}
             fileInputRef={fileInputRef}
             reset={reset}
+            pending={getUserInformation.loading === 'pending'}
           />
         </Grid>
       </Grid>
