@@ -1,8 +1,9 @@
-import { Box, CardContent, CardMedia, Link, Typography } from '@mui/material';
+import { Box, Button, CardContent, CardMedia, Link, Typography } from '@mui/material';
 import { Stack, styled } from '@mui/system';
 import { jwtDecode } from 'jwt-decode';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import BlankCard from '../../components/shared/BlankCard';
 import { institution_status } from '../../config/Constant';
@@ -17,7 +18,8 @@ const DetailTypo = styled(Typography)(({ theme }) => ({
 
 const InstitutionDetail2 = () => {
   const dispatch = useDispatch();
-  const {institution_id} = jwtDecode(sessionStorage.getItem('token'));
+  const navigate = useNavigate();
+  const { institution_id } = jwtDecode(sessionStorage.getItem('token'));
   const institution = useSelector(getInstitution);
 
   useEffect(() => {
@@ -34,7 +36,9 @@ const InstitutionDetail2 = () => {
     },
   ];
 
-  
+  const handleEditBtn = () => {
+    navigate('/institution_detail/edit');
+  };
 
   return (
     <Box>
@@ -128,6 +132,14 @@ const InstitutionDetail2 = () => {
               )}
             </DetailTypo>
           </Stack>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ float: 'right', mb: 2 }}
+            onClick={handleEditBtn}
+          >
+            Edit
+          </Button>
         </CardContent>
       </BlankCard>
     </Box>
