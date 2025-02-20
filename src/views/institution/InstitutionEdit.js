@@ -4,13 +4,14 @@ import { Box } from '@mui/system';
 import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { institution_status } from '../../config/Constant';
 import Breadcrumb from '../../layouts/full/shared/breadcrumb/Breadcrumb';
 import { getInstitution } from '../../store/reducers/institution/institutionSlice';
 import { getInstitutionById, updateInstitution } from '../../store/thunk/institution';
 import InstitutionForm from './InstitutionForm';
 import schemaInstitution from './schemaInstitution';
+import Swal from 'sweetalert2';
 
 const BCrumb = [
   {
@@ -29,6 +30,7 @@ const BCrumb = [
 const InstitutionEdit = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigation = useNavigate();
   const institution = useSelector(getInstitution);
   const fileInputRef = useRef(null);
 
@@ -111,9 +113,22 @@ const InstitutionEdit = () => {
         if (fileInputRef.current) {
           fileInputRef.current.value = null;
         }
+        Swal.fire({
+          icon: 'success',
+          title: 'Institution updated successfully',
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          navigation('/institutions');
+        });
       })
       .catch((error) => {
-        console.error('Update Error:', error);
+        console.log(error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Institution update failed!',
+        });
       });
   };
 

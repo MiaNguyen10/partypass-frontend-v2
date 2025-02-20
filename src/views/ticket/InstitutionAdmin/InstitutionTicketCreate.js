@@ -10,6 +10,8 @@ import schemaTicket from '../schemaTicket';
 import InstitutionTicketForm from './InstitutionTicketForm';
 import { jwtDecode } from 'jwt-decode';
 import { useEffect } from 'react';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router';
 
 const BCrumb = [
   {
@@ -27,6 +29,7 @@ const BCrumb = [
 
 const InstitutionTicketCreate = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigate();
   const { institution_id } = jwtDecode(sessionStorage.getItem('token'));
 
   const {
@@ -70,7 +73,25 @@ const InstitutionTicketCreate = () => {
       start_datetime: data.is_regular ? '' : data.start_datetime,
       end_datetime: data.is_regular ? '' : data.end_datetime,
     };
-    dispatch(createTicket(ticketData));
+    dispatch(createTicket(ticketData))
+      .then(() => {
+        Swal.fire({
+          icon: 'success',
+          title: 'New ticket created successfully',
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          navigation('/tickets');
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Ticket creation failed!',
+        });
+      });
     reset();
   };
   return (

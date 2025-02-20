@@ -160,7 +160,7 @@ const EnhancedTableToolbar = (props) => {
           <Stack direction="row" alignItems="center" spacing={1}>
             <Button
               variant="text"
-              startIcon={<IconFilePlus size="1.8rem" />}
+              startIcon={<IconFilePlus size="1.2rem" />}
               onClick={handleCreateBtn}
             >
               {AddBtnTitle}

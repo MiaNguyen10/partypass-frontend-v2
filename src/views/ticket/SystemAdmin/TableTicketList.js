@@ -118,7 +118,7 @@ const TableTicketList = () => {
         searchPlaceholder="Search ticket name"
         handleCreateBtn={handleCreateBtn}
         keyDelete="ticket"
-        AddBtnTitle="Add New Ticket"
+        AddBtnTitle="Add Ticket"
       />
     </div>
   );

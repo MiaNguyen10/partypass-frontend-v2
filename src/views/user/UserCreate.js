@@ -78,19 +78,28 @@ const UserCreate = () => {
       formData.append('profile_pic', data.profile_pic[0]);
     }
 
-    dispatch(createUser({ userData: formData })).then(() => {
-      if (fileInputRef.current) {
-        fileInputRef.current.value = null;
-      }
-      Swal.fire({
-        icon: 'success',
-        title: 'New user added successfully',
-        showConfirmButton: false,
-        timer: 1500,
-      }).then(() => {
-        navigation('/users');
+    dispatch(createUser({ userData: formData }))
+      .then(() => {
+        if (fileInputRef.current) {
+          fileInputRef.current.value = null;
+        }
+        Swal.fire({
+          icon: 'success',
+          title: 'New user added successfully',
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          navigation('/users');
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'User creation failed!',
+        });
       });
-    });
     reset();
   };
 

@@ -2,11 +2,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import { Box } from '@mui/system';
 import { jwtDecode } from 'jwt-decode';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import AlertDialog2 from '../../components/material-ui/dialog/AlertDialog2';
-import { institution_status, loading_status } from '../../config/Constant';
+import { useNavigate } from 'react-router';
+import Swal from 'sweetalert2';
+import { institution_status } from '../../config/Constant';
 import Breadcrumb from '../../layouts/full/shared/breadcrumb/Breadcrumb';
 import { getInstitution } from '../../store/reducers/institution/institutionSlice';
 import { getInstitutionById, updateInstitution } from '../../store/thunk/institution';
@@ -32,8 +33,7 @@ const InstitutionEdit2 = () => {
   const { institution_id } = jwtDecode(sessionStorage.getItem('token'));
   const institution = useSelector(getInstitution);
   const fileInputRef = useRef(null);
-  const { loading } = useSelector((state) => state.institution);
-  const [openAlertDialog, setOpenAlertDialog] = useState(false);
+  const navigation = useNavigate();
 
   useEffect(() => {
     dispatch(getInstitutionById(institution_id));
@@ -111,19 +111,26 @@ const InstitutionEdit2 = () => {
       .then(() => {
         dispatch(getInstitutionById(institution_id));
 
-        if (loading === loading_status.succeeded) {
-          setOpenAlertDialog(true);
-        } else {
-          setOpenAlertDialog(false);
-        }
-
         // Reset the file input
         if (fileInputRef.current) {
           fileInputRef.current.value = null;
         }
+        Swal.fire({
+          icon: 'success',
+          title: 'Institution updated successfully',
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          navigation('/institution_detail');
+        });
       })
       .catch((error) => {
-        console.error('Update Error:', error);
+        console.log(error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Institution update failed!',
+        });
       });
   };
 
@@ -147,19 +154,6 @@ const InstitutionEdit2 = () => {
           />
         </Grid>
       </Grid>
-
-      {/* Alert Dialog */}
-      <AlertDialog2
-        openAlertDialog={openAlertDialog.open}
-        setOpenAlertDialog={setOpenAlertDialog}
-        noticeText={loading === loading_status.succeeded ? 'Congrats!' : 'Oops!'}
-        noticeText2={
-          loading === loading_status.succeeded
-            ? 'Your institution is edited successfully'
-            : 'Something went wrong.'
-        }
-        success={loading === loading_status.succeeded ? true : false}
-      />
     </Box>
   );
 };

@@ -8,6 +8,8 @@ import Breadcrumb from '../../layouts/full/shared/breadcrumb/Breadcrumb';
 import { createLocker } from '../../store/thunk/locker';
 import LockerForm from './LockerForm';
 import schemaLocker from './schemaLocker';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router';
 
 const BCrumb = [
   {
@@ -25,7 +27,8 @@ const BCrumb = [
 
 const LockerCreate = () => {
   const dispatch = useDispatch();
-  const {institution_id} = jwtDecode(sessionStorage.getItem("token"));
+  const navigation = useNavigate();
+  const { institution_id } = jwtDecode(sessionStorage.getItem('token'));
 
   const {
     handleSubmit,
@@ -46,9 +49,25 @@ const LockerCreate = () => {
       ...data,
       institution_id: parseInt(institution_id, 10),
     };
-    dispatch(createLocker({ lockerData })).catch((error) => {
-      console.log(error);
-    });
+    dispatch(createLocker({ lockerData }))
+      .then(() => {
+        Swal.fire({
+          icon: 'success',
+          title: 'New locker created successfully',
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          navigation('/lockers');
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Locker creation failed!',
+        });
+      });
     reset();
   };
 

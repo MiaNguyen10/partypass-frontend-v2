@@ -9,6 +9,7 @@ import {
 import { jwtDecode } from 'jwt-decode';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import Swal from 'sweetalert2';
 import { roles } from '../../config/Constant';
 import {
   deleteInstitution,
@@ -27,8 +28,6 @@ const FormDialog = ({ openDialog, setOpenDialog, selected, keyDelete, setSelecte
     setOpenDialog(false);
   };
 
-  console.log(role);
-
   const handleDelete = async () => {
     try {
       switch (role) {
@@ -37,20 +36,14 @@ const FormDialog = ({ openDialog, setOpenDialog, selected, keyDelete, setSelecte
             case 'ticket':
               await Promise.all(selected.map((id) => dispatch(deleteTicket(id))));
               await dispatch(getTicketList());
-              setOpenDialog(false);
-              setSelected([]);
               break;
             case 'institution':
               await Promise.all(selected.map((id) => dispatch(deleteInstitution(id))));
               await dispatch(getInstitutionList());
-              setOpenDialog(false);
-              setSelected([]);
               break;
             case 'user':
               await Promise.all(selected.map((id) => dispatch(deleteUserById(id))));
               await dispatch(getUserList());
-              setOpenDialog(false);
-              setSelected([]);
               break;
             default:
               break;
@@ -61,8 +54,6 @@ const FormDialog = ({ openDialog, setOpenDialog, selected, keyDelete, setSelecte
             case 'ticket':
               await Promise.all(selected.map((id) => dispatch(deleteTicket(id))));
               await dispatch(getTicketListFromInstitution(institutionId));
-              setOpenDialog(false);
-              setSelected([]);
               break;
             case 'locker':
               await Promise.all(
@@ -72,8 +63,6 @@ const FormDialog = ({ openDialog, setOpenDialog, selected, keyDelete, setSelecte
                 }),
               );
               await dispatch(getLockerListByInstitution(institutionId));
-              setOpenDialog(false);
-              setSelected([]);
               break;
             default:
               break;
@@ -82,10 +71,27 @@ const FormDialog = ({ openDialog, setOpenDialog, selected, keyDelete, setSelecte
         default:
           break;
       }
+      // Reset dialog and selection after deletion
+      setOpenDialog(false);
+      setSelected([]);
+      // Show success alert
+      Swal.fire({
+        icon: 'success',
+        title: 'Deletion successful!',
+        showConfirmButton: false,
+        timer: 1500,
+      });
     } catch (error) {
       console.error('Error during deletion:', error);
+      // Show error alert
+      Swal.fire({
+        icon: 'error',
+        title: 'Deletion failed!',
+        text: 'An error occurred while deleting.',
+      });
     }
   };
+  
 
   return (
     <>

@@ -5,13 +5,14 @@ import { jwtDecode } from 'jwt-decode';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { locker_status } from '../../config/Constant';
 import { getLocker } from '../../store/reducers/locker/lockerSlice';
 import { getLockerById, updateLocker } from '../../store/thunk/locker';
 import LockerForm from './LockerForm';
 import schemaLocker from './schemaLocker';
 import Breadcrumb from '../../layouts/full/shared/breadcrumb/Breadcrumb';
+import Swal from 'sweetalert2';
 
 const BCrumb = [
   {
@@ -30,6 +31,7 @@ const BCrumb = [
 const LockerEdit = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigation = useNavigate();
   const locker = useSelector(getLocker);
   const { institution_id } = jwtDecode(sessionStorage.getItem('token'));
 
@@ -70,9 +72,22 @@ const LockerEdit = () => {
     dispatch(updateLocker({ locker_id: id, lockerData }))
       .then(() => {
         dispatch(getLockerById({ locker_id: id }));
+        Swal.fire({
+          icon: 'success',
+          title: 'Locker updated successfully',
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          navigation('/lockers');
+        });
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Locker update failed!',
+        });
       });
   };
 

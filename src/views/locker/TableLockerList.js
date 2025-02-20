@@ -90,6 +90,7 @@ const TableLockerList = () => {
         searchPlaceholder="Search locker"
         handleCreateBtn={handleCreateBtn}
         keyDelete='locker'
+        AddBtnTitle='Add Locker'
       />
     </div>
   );

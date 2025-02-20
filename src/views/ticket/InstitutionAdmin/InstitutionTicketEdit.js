@@ -5,12 +5,13 @@ import dayjs from 'dayjs';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import Breadcrumb from '../../../layouts/full/shared/breadcrumb/Breadcrumb';
 import { getTicket } from '../../../store/reducers/ticket/ticketSlice';
 import { getTicketById, updateTicket } from '../../../store/thunk/ticket';
 import schemaTicket from '../schemaTicket';
 import InstitutionTicketForm from './InstitutionTicketForm';
+import Swal from 'sweetalert2';
 
 const BCrumb = [
   {
@@ -29,6 +30,7 @@ const BCrumb = [
 const InstitutionTicketEdit = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigation = useNavigate();
   const ticket = useSelector(getTicket);
 
   useEffect(() => {
@@ -76,7 +78,6 @@ const InstitutionTicketEdit = () => {
   }, [ticket]);
 
   const onSubmit = (data) => {
-    
     const ticketData = {
       ...data,
       institution_id: parseInt(data.institution_id, 10),
@@ -87,14 +88,26 @@ const InstitutionTicketEdit = () => {
       start_datetime: data.is_regular ? '' : data.start_datetime,
       end_datetime: data.is_regular ? '' : data.end_datetime,
     };
-    console.log(ticketData);
 
     dispatch(updateTicket({ ticket_id: id, ticketData }))
       .then(() => {
         dispatch(getTicketById(id));
+        Swal.fire({
+          icon: 'success',
+          title: 'Ticket updated successfully',
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          navigation('/tickets');
+        });
       })
       .catch((error) => {
         console.error(error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Ticket update failed!',
+        });
       });
   };
 
