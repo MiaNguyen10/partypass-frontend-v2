@@ -58,6 +58,8 @@ jobs:
   
       - name: Link Netlify Site
         run: netlify link --id $NETLIFY_SITE_ID
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
   
       - name: Deploy to Netlify
         run: netlify deploy --prod --dir=dist
