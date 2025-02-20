@@ -33,6 +33,7 @@
     "date-fns": "^2.29.2",
     "dayjs": "^1.11.13",
     "emoji-picker-react": "^3.6.1",
+    "formidable": "^3.5.2",
     "formik": "^2.2.9",
     "framer-motion": "^8.5.2",
     "i18next": "^22.0.6",
@@ -58,6 +59,7 @@
     "simplebar-react": "^2.4.1",
     "slick-carousel": "^1.8.1",
     "stylis-plugin-rtl": "^2.0.2",
+    "sweetalert2": "^11.17.2",
     "yup": "^0.32.11"
   },
   "devDependencies": {

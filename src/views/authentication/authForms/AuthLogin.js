@@ -1,10 +1,11 @@
-import React from 'react';
 import { Box, Button, IconButton, Stack, Typography } from '@mui/material';
-import PropTypes from 'prop-types';
 import { IconEye, IconEyeOff } from '@tabler/icons';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import CustomFormLabel from '../../../components/forms/theme-elements/CustomFormLabel';
 import CustomTextField from '../../../components/forms/theme-elements/CustomTextField';
+import Spinner from '../../../views/spinner/Loader'; // Import your spinner component
 
 const AuthLogin = ({
   title,
@@ -15,6 +16,7 @@ const AuthLogin = ({
   passwordError,
   passwordErrorMessage,
   errorLogin,
+  loading,
 }) => {
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => {
@@ -70,14 +72,21 @@ const AuthLogin = ({
           </Typography>
         )}
         <Box mt={3}>
-          <Button color="primary" variant="contained" size="large" fullWidth type="submit">
-            Sign In
-          </Button>
+          {loading === 'pending' ? (
+            <div style={{ width: '20px', height: '20px' }}>
+              <Spinner />
+            </div>
+          ) : (
+            <Button color="primary" variant="contained" size="large" fullWidth type="submit">
+              Sign In
+            </Button>
+          )}
         </Box>
       </Stack>
     </>
   );
 };
+
 AuthLogin.propTypes = {
   title: PropTypes.string,
   subtext: PropTypes.node,
@@ -87,6 +96,7 @@ AuthLogin.propTypes = {
   passwordError: PropTypes.bool,
   passwordErrorMessage: PropTypes.string,
   errorLogin: PropTypes.string,
+  loading: PropTypes.string, // Change to bool
 };
 
 export default AuthLogin;

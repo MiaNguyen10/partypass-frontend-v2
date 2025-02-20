@@ -76,7 +76,7 @@ const userSlice = createSlice({
       })
       .addCase(createUser.fulfilled, (state, action) => {
         state.loading = loading_status.succeeded;
-        state.tickets.push(action.payload);
+        state.users.push(action.payload);
         state.error = null;
       })
       .addCase(createUser.rejected, (state, action) => {

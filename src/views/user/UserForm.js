@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 import CustomCheckbox from '../../components/forms/theme-elements/CustomCheckbox';
 import CustomFormLabel from '../../components/forms/theme-elements/CustomFormLabel';
 import CustomTextField from '../../components/forms/theme-elements/CustomTextField';
@@ -24,11 +25,13 @@ const UserForm = ({
   setValue,
   reset,
   fileInputRef,
+  pending,
 }) => {
   const profile_pic = watch('profile_pic');
   const allowedExts = getAllowedExt('image');
   const institutions = useSelector(getInstitutions);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getInstitutionList());
@@ -127,6 +130,7 @@ const UserForm = ({
           render={({ field: { onChange, value } }) => (
             <Box>
               <CustomFormLabel htmlFor="role">Role</CustomFormLabel>
+
               <CustomTextField
                 select
                 value={value}
@@ -252,6 +256,7 @@ const UserForm = ({
               />
             )}
           />
+
           {profile_pic && Array.isArray(profile_pic) && profile_pic.length > 0 ? (
             <PreviewFile
               className={{ margin: 'auto' }}
@@ -274,11 +279,14 @@ const UserForm = ({
             sx={{
               mr: 1,
             }}
-            onClick={() => reset()}
+            onClick={() => {
+              reset();
+              navigate('/users');
+            }}
           >
             Cancel
           </Button>
-          <Button variant="contained" color="primary" type="submit">
+          <Button variant="contained" color="primary" type="submit" disabled={pending}>
             Submit
           </Button>
         </Box>
@@ -296,6 +304,7 @@ UserForm.propTypes = {
   watch: PropTypes.func.isRequired,
   setValue: PropTypes.func.isRequired,
   fileInputRef: PropTypes.object.isRequired,
+  pending: PropTypes.bool.isRequired,
 };
 
 export default UserForm;

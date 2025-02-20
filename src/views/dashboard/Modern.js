@@ -1,47 +1,45 @@
-import React from 'react';
 import { Box, Grid } from '@mui/material';
-import TopCards from '../../components/dashboards/modern/TopCards';
-import RevenueUpdates from '../../components/dashboards/modern/RevenueUpdates';
-import YearlyBreakup from '../../components/dashboards/modern/YearlyBreakup';
-import MonthlyEarnings from '../../components/dashboards/modern/MonthlyEarnings';
-import EmployeeSalary from '../../components/dashboards/modern/EmployeeSalary';
-import Customers from '../../components/dashboards/modern/Customers';
-import Projects from '../../components/dashboards/modern/Projects';
-import Social from '../../components/dashboards/modern/Social';
-import SellingProducts from '../../components/dashboards/modern/SellingProducts';
-import WeeklyStats from '../../components/dashboards/modern/WeeklyStats';
-import TopPerformers from '../../components/dashboards/modern/TopPerformers';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Welcome from 'src/layouts/full/shared/welcome/Welcome';
+import SellingProducts from '../../components/dashboards/modern/SellingProducts';
+import TopCards from '../../components/dashboards/modern/TopCards';
+import TopPerformers from '../../components/dashboards/modern/TopPerformers';
+import { getDashboardAnalytics } from '../../store/thunk/dashboard';
 
 const Modern = () => {
+  const dispatch = useDispatch();
+  const getDashboard = useSelector((state) => state.dashboard);
+
+  useEffect(() => {
+    dispatch(getDashboardAnalytics());
+  }, [dispatch]);
+
   return (
     <Box>
       <Grid container spacing={3}>
         {/* column */}
         <Grid item sm={12} lg={12}>
-          <TopCards />
+          {getDashboard.loading === 'succeeded' && <TopCards />}
         </Grid>
         {/* column */}
         <Grid item xs={12} lg={8}>
-          <RevenueUpdates />
+          {getDashboard.loading === 'succeeded' && <TopPerformers />}
         </Grid>
         {/* column */}
         <Grid item xs={12} lg={4}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6} lg={12}>
-              <YearlyBreakup />
-            </Grid>
-            <Grid item xs={12} sm={6} lg={12}>
-              <MonthlyEarnings />
+              {getDashboard.loading === 'succeeded' && <SellingProducts />}
             </Grid>
           </Grid>
         </Grid>
         {/* column */}
-        <Grid item xs={12} lg={4}>
+        {/* <Grid item xs={12} lg={4}>
           <EmployeeSalary />
-        </Grid>
+        </Grid> */}
         {/* column */}
-        <Grid item xs={12} lg={4}>
+        {/* <Grid item xs={12} lg={4}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>
               <Customers />
@@ -53,18 +51,18 @@ const Modern = () => {
               <Social />
             </Grid>
           </Grid>
+        </Grid> */}
+        {/* column */}
+        <Grid item xs={12} lg={4}>
+          {/* <SellingProducts /> */}
         </Grid>
         {/* column */}
         <Grid item xs={12} lg={4}>
-          <SellingProducts />
-        </Grid>
-        {/* column */}
-        <Grid item xs={12} lg={4}>
-          <WeeklyStats />
+          {/* <WeeklyStats /> */}
         </Grid>
         {/* column */}
         <Grid item xs={12} lg={8}>
-          <TopPerformers />
+          {/* <TopPerformers /> */}
         </Grid>
       </Grid>
       {/* column */}
