@@ -26,6 +26,7 @@ const InstitutionList = Loadable(lazy(() => import('../views/institution/Institu
 const InstitutionDetail = Loadable(lazy(() => import('../views/institution/InstitutionDetail')));
 const InstitutionDetail2 = Loadable(lazy(() => import('../views/institution/InstitutionDetail2')));
 const InstitutionEdit = Loadable(lazy(() => import('../views/institution/InstitutionEdit')));
+const InstitutionEdit2 = Loadable(lazy(() => import('../views/institution/InstitutionEdit2')));
 const InstitutionCreate = Loadable(lazy(() => import('../views/institution/InstitutionCreate')));
 const LockerListForInstitution = Loadable(lazy(() => import('../views/institution/LockerListForInstitution')));
 
@@ -123,6 +124,7 @@ const Router = [
             children: [
               //institution
               { path: '/institution_detail', element: <InstitutionDetail2 /> },
+              { path: '/institution_detail/edit', element: <InstitutionEdit2 /> },
 
               //ticket
               { path: '/tickets_institution', element: <InstitutionTicketList /> },

@@ -53,12 +53,15 @@ jobs:
         env:
           DEPLOY_PLATFORM: github
 
-      # Deploy to Netlify
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+  
+      - name: Link Netlify Site
+        run: netlify link --id $NETLIFY_SITE_ID
+  
       - name: Deploy to Netlify
+        run: netlify deploy --prod --dir=dist
         env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_SECRET_TOKEN }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        run: |
-          npm install -g netlify-cli
-          netlify deploy --prod --dir=dist --site=$NETLIFY_SITE_ID
         
