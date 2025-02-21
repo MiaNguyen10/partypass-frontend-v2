@@ -95,7 +95,7 @@ export const updateUser = createAsyncThunk(
   'user/updateUser',
   async ({ userData }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.put('/api/v1/users/update-user', userData);
+      const response = await axiosInstance.patch('/api/v1/users/update-user', userData);
       return response.data;
     } catch (error) {
       if (!error.response) {

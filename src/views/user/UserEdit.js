@@ -82,6 +82,7 @@ const UserEdit = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationUser]);
+  
   const onSubmit = (data) => {
     const userData = {
       ...data,

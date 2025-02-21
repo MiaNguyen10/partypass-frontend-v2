@@ -83,8 +83,25 @@ const AccountTab = () => {
       ...data,
       institution_id: parseInt(data.institution_id, 10),
       role: parseInt(data.role, 10),
+      is_social: data.is_social ? 1 : 0,
     };
-    dispatch(updateUser({ userData }))
+
+    const formData = new FormData();
+
+    Object.keys(userData).forEach((key) => {
+      if (key === 'profile_pic') {
+        // Handle file uploads
+        if (Array.isArray(userData[key]) && userData[key].length > 0) {
+          userData[key].forEach((file) => {
+            formData.append(key, file);
+          });
+        }
+      } else {
+        formData.append(key, userData[key]);
+      }
+    });
+
+    dispatch(updateUser({ userData: formData }))
       .then(() => {
         dispatch(getUserInformation());
         // Reset the file input

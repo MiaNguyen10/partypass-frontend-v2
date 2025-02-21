@@ -61,7 +61,7 @@ const UserDetail = () => {
           <Stack direction="row" gap={6} alignItems="center" my={2}>
             <DetailTypo>
               <strong>Role: </strong>{' '}
-              {userInformatioin?.role && roles[userInformatioin?.role]?.value}
+              {roles[userInformatioin?.role]?.value}
             </DetailTypo>
           </Stack>
           {userInformatioin?.institution_id && (
