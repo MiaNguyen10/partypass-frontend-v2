@@ -30,6 +30,7 @@ import { getUserInformation, updateUser } from '../../../store/thunk/user';
 import PreviewFile from '../../../views/institution/PreviewFile';
 import schemaUser from '../../../views/user/schemaUser';
 import CustomCheckbox from '../../forms/theme-elements/CustomCheckbox';
+import Swal from 'sweetalert2';
 
 const AccountTab = () => {
   const dispatch = useDispatch();
@@ -94,9 +95,19 @@ const AccountTab = () => {
         if (fileInputRef.current) {
           fileInputRef.current.value = null;
         }
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'User has been updated',
+        });
       })
       .catch((error) => {
         console.error(error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'User update failed!',
+        });
       });
   };
 
@@ -108,7 +119,7 @@ const AccountTab = () => {
   const allowedExts = getAllowedExt('image');
 
   return (
-    <Grid container spacing={3}>
+    <Grid>
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Edit Details */}
         <Grid item xs={12}>
@@ -424,7 +435,7 @@ const AccountTab = () => {
                             <Button
                               variant="outlined"
                               color="error"
-                              onClick={() => setValue('profile_pic', [])}
+                              onClick={() => setValue('profile_pic', userInfo.profile_pic || [])}
                             >
                               Reset
                             </Button>
@@ -437,17 +448,19 @@ const AccountTab = () => {
                     />
                   </Box>
                 </Grid>
+                <Grid item xs={12}>
+                  <Stack direction="row" spacing={2} sx={{ justifyContent: 'end' }} mt={3}>
+                    <Button size="large" variant="contained" color="primary" type="submit">
+                      Save
+                    </Button>
+                    <Button size="large" variant="text" color="error" onClick={() => reset()}>
+                      Cancel
+                    </Button>
+                  </Stack>
+                </Grid>
               </Grid>
             </CardContent>
           </BlankCard>
-          <Stack direction="row" spacing={2} sx={{ justifyContent: 'end' }} mt={3}>
-            <Button size="large" variant="contained" color="primary" type="submit">
-              Save
-            </Button>
-            <Button size="large" variant="text" color="error" onClick={() => reset()}>
-              Cancel
-            </Button>
-          </Stack>
         </Grid>
       </form>
     </Grid>

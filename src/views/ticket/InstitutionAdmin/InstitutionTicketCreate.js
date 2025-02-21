@@ -81,7 +81,7 @@ const InstitutionTicketCreate = () => {
           showConfirmButton: false,
           timer: 1500,
         }).then(() => {
-          navigation('/tickets');
+          navigation('/tickets_institution');
         });
       })
       .catch((error) => {

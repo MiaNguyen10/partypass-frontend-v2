@@ -56,13 +56,8 @@ const FormDialog = ({ openDialog, setOpenDialog, selected, keyDelete, setSelecte
               await dispatch(getTicketListFromInstitution(institutionId));
               break;
             case 'locker':
-              await Promise.all(
-                selected.map((id) => {
-                  console.log(id);
-                  return dispatch(deleteLocker(id));
-                }),
-              );
-              await dispatch(getLockerListByInstitution(institutionId));
+              await Promise.all(selected.map((id) => dispatch(deleteLocker(id))));
+              await dispatch(getLockerListByInstitution({ institution_id: institutionId }));
               break;
             default:
               break;
@@ -91,7 +86,6 @@ const FormDialog = ({ openDialog, setOpenDialog, selected, keyDelete, setSelecte
       });
     }
   };
-  
 
   return (
     <>

@@ -7,7 +7,6 @@ import { Stack } from '@mui/system';
 import { IconMail } from '@tabler/icons';
 
 import { useDispatch, useSelector } from 'react-redux';
-import ProfileImg from 'src/assets/images/profile/user-1.jpg';
 import Scrollbar from 'src/components/custom-scroll/Scrollbar';
 import { roles } from '../../../../config/Constant';
 import { logout } from '../../../../store/reducers/authenticate/authenticateSlice';
@@ -51,8 +50,8 @@ const Profile = () => {
         onClick={handleClick2}
       >
         <Avatar
-          src={ProfileImg}
-          alt={ProfileImg}
+          src={currentUser.profile_pic}
+          alt={currentUser.name}
           sx={{
             width: 35,
             height: 35,

@@ -161,9 +161,9 @@ const TicketForm = ({ handleSubmit, onSubmit, control, formErrors, watch, reset 
                   <CustomFormLabel htmlFor="status">Start Time</CustomFormLabel>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <TimePicker
-                      value={value ? dayjs(value, 'HH:mm:ss') : null}
+                      value={value ? dayjs(value, 'HH:mm') : null}
                       onChange={(newValue) => {
-                        onChange(newValue ? newValue.format('HH:mm:ss') : null);
+                        onChange(newValue ? newValue.format('HH:mm') : null);
                       }}
                       format="HH:mm:ss"
                       renderInput={(params) => (
@@ -187,9 +187,9 @@ const TicketForm = ({ handleSubmit, onSubmit, control, formErrors, watch, reset 
                   <CustomFormLabel htmlFor="status">End Time</CustomFormLabel>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <TimePicker
-                      value={value ? dayjs(value, 'HH:mm:ss') : null}
+                      value={value ? dayjs(value, 'HH:mm') : null}
                       onChange={(newValue) => {
-                        onChange(newValue ? newValue.format('HH:mm:ss') : null);
+                        onChange(newValue ? newValue.format('HH:mm') : null);
                       }}
                       format="HH:mm:ss"
                       renderInput={(params) => (
