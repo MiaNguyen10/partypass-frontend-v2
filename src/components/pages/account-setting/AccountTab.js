@@ -22,26 +22,22 @@ import dayjs from 'dayjs';
 import { useEffect, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
 import { roles, validFileExtensions } from '../../../config/Constant';
-import { getInstitution } from '../../../store/reducers/institution/institutionSlice';
 import { getUserLogin } from '../../../store/reducers/user/userSlice';
-import { getInstitutionById } from '../../../store/thunk/institution';
 import { getUserInformation, updateUser } from '../../../store/thunk/user';
 import PreviewFile from '../../../views/institution/PreviewFile';
 import schemaUser from '../../../views/user/schemaUser';
 import CustomCheckbox from '../../forms/theme-elements/CustomCheckbox';
-import Swal from 'sweetalert2';
 
 const AccountTab = () => {
   const dispatch = useDispatch();
   const userInfo = useSelector(getUserLogin);
-  const institution = useSelector(getInstitution);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
     dispatch(getUserInformation());
-    dispatch(getInstitutionById(userInfo?.institution_id));
-  }, [dispatch, userInfo?.institution_id]);
+  }, [dispatch]);
 
   const {
     handleSubmit,
@@ -73,7 +69,7 @@ const AccountTab = () => {
         phone: userInfo.phone,
         date_of_birth: dayjs(userInfo.date_of_birth),
         role: userInfo.role,
-        institution_id: userInfo.institution_id || '',
+        institution: userInfo.institution.name || '',
         is_social: userInfo.is_social,
         social_uuid: userInfo.social_uuid,
         profile_pic: userInfo.profile_pic || [],
@@ -304,8 +300,8 @@ const AccountTab = () => {
                   {/* 6 */}
                   <Controller
                     control={control}
-                    name="institution_id"
-                    render={() => (
+                    name="institution"
+                    render={({ field: { value } }) => (
                       <Box width="100%">
                         <CustomFormLabel
                           sx={{
@@ -315,16 +311,7 @@ const AccountTab = () => {
                         >
                           Institution
                         </CustomFormLabel>
-                        <CustomTextField
-                          value={institution?.name}
-                          error={!!formErrors?.institution_id}
-                          helperText={
-                            formErrors.institution_id && formErrors.institution_id.message
-                          }
-                          variant="outlined"
-                          fullWidth
-                          disabled
-                        />
+                        <CustomTextField value={value} variant="outlined" fullWidth disabled />
                       </Box>
                     )}
                   />
@@ -354,7 +341,7 @@ const AccountTab = () => {
                       )}
                     />
 
-                    {watch('is_social') && (
+                    {watch('is_social') == 1 && (
                       <Controller
                         control={control}
                         name="social_uuid"

@@ -56,6 +56,23 @@ const InstitutionPurchaseDetail = () => {
               </Typography>
 
               <Stack direction="row" ml="auto" alignItems="center">
+                <Box
+                  sx={{
+                    backgroundColor: (() => {
+                      if (ticket_status[purchase.ticket_status]?.value === 'Purchased') {
+                        return (theme) => theme.palette.success.light;
+                      } else if (ticket_status[purchase.ticket_status]?.value === 'Checked out') {
+                        return (theme) => theme.palette.error.light;
+                      } else if (ticket_status[purchase.ticket_status]?.value === 'Entered') {
+                        return (theme) => theme.palette.warning.light;
+                      }
+                      return 'transparent';
+                    })(),
+                    borderRadius: '100%',
+                    height: '10px',
+                    width: '10px',
+                  }}
+                />
                 <Typography
                   color="textSecondary"
                   variant="subtitle2"
@@ -63,7 +80,7 @@ const InstitutionPurchaseDetail = () => {
                     ml: 1,
                   }}
                 >
-                  {purchase?.ticket_status && ticket_status[purchase?.ticket_status]?.value}
+                  {ticket_status[purchase?.ticket_status]?.value}
                 </Typography>
               </Stack>
             </Box>
@@ -77,19 +94,23 @@ const InstitutionPurchaseDetail = () => {
               </DetailTypo>
             </Stack>
             {purchase?.ticket_type?.is_regular === 0 && (
-              <DetailTypo>
-                <strong>Ticket date:</strong>{' '}
-                {dayjs(purchase?.ticket_date).format('DD/MM/YYYY')}. From{' '}
-                {purchase.ticket_type.start_datetime} to {purchase.ticket_type.end_datetime}
-              </DetailTypo>
+              <Stack direction="row" gap={6} alignItems="center" my={2}>
+                <DetailTypo>
+                  <strong>Ticket date:</strong> {dayjs(purchase?.ticket_date).format('DD/MM/YYYY')}.
+                </DetailTypo>
+                <DetailTypo>
+                  <strong>From</strong> {purchase.ticket_type.start_datetime} <strong>to</strong>{' '}
+                  {purchase.ticket_type.end_datetime}
+                </DetailTypo>
+              </Stack>
             )}
             <Stack direction="row" gap={6} alignItems="center" my={2}>
               <DetailTypo>
                 <strong>Payment method:</strong> {purchase?.payment_method}
               </DetailTypo>
-              <DetailTypo>
+              {/* <DetailTypo>
                 <strong>Payment status:</strong> {purchase?.payment_status}
-              </DetailTypo>
+              </DetailTypo> */}
               <DetailTypo>
                 <strong>Price amount: </strong> {purchase?.price_amount}
               </DetailTypo>

@@ -81,7 +81,8 @@ const UserDetail = () => {
             <DetailTypo>
               <strong>Profile picture: </strong>
             </DetailTypo>
-            {console.log('profile_pic', userInformatioin?.profile_pic)}
+          </Stack>
+          <Stack direction="row" gap={6} alignItems="center" my={2}>
             {userInformatioin?.profile_pic && (
               // <PreviewFile
               //   className={{ margin: 'auto' }}
