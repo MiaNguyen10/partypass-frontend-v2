@@ -129,6 +129,7 @@ const AccountTab = () => {
   }
 
   const profile_pic = watch('profile_pic');
+  const role = watch('role');
   const allowedExts = getAllowedExt('image');
 
   return (
@@ -313,26 +314,40 @@ const AccountTab = () => {
                     )}
                   />
                 </Grid>
-                <Grid item xs={12}>
-                  {/* 6 */}
-                  <Controller
-                    control={control}
-                    name="institution"
-                    render={({ field: { value } }) => (
-                      <Box width="100%">
-                        <CustomFormLabel
-                          sx={{
-                            mt: 0,
-                          }}
-                          htmlFor="institution"
-                        >
-                          Institution
-                        </CustomFormLabel>
-                        <CustomTextField value={value} variant="outlined" fullWidth disabled />
-                      </Box>
-                    )}
-                  />
-                </Grid>
+                {
+                  // If the user is an institutional admin/ staff, show the institution field
+                  role === 2 || role === 3 ? (
+                    <Grid item xs={12} sm={6}>
+                      <Controller
+                        control={control}
+                        name="institution_id"
+                        render={({ field: { onChange, value } }) => (
+                          <Box>
+                            <CustomFormLabel
+                              sx={{
+                                mt: 0,
+                              }}
+                              htmlFor="institution_id"
+                            >
+                              Institution
+                            </CustomFormLabel>
+                            <CustomTextField
+                              value={value}
+                              onChange={onChange}
+                              error={!!formErrors.institution_id}
+                              helperText={
+                                formErrors.institution_id && formErrors.institution_id.message
+                              }
+                              variant="outlined"
+                              fullWidth
+                              disabled
+                            />
+                          </Box>
+                        )}
+                      />
+                    </Grid>
+                  ) : null
+                }
                 <Grid item xs={12}>
                   <Box>
                     <Controller

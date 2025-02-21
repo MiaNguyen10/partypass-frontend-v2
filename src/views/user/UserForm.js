@@ -28,6 +28,7 @@ const UserForm = ({
   pending,
 }) => {
   const profile_pic = watch('profile_pic');
+  const role = watch('role');
   const allowedExts = getAllowedExt('image');
   const institutions = useSelector(getInstitutions);
   const dispatch = useDispatch();
@@ -149,31 +150,32 @@ const UserForm = ({
             </Box>
           )}
         />
-
-        <Controller
-          control={control}
-          name="institution_id"
-          render={({ field: { onChange, value } }) => (
-            <Box width="100%">
-              <CustomFormLabel htmlFor="status">Institution</CustomFormLabel>
-              <CustomTextField
-                select
-                value={value || ''}
-                onChange={onChange}
-                error={!!formErrors?.institution_id}
-                helperText={formErrors.institution_id && formErrors.institution_id.message}
-                variant="outlined"
-                fullWidth
-              >
-                {institutions.map((institution) => (
-                  <MenuItem key={institution.institution_id} value={institution.institution_id}>
-                    {institution.name}
-                  </MenuItem>
-                ))}
-              </CustomTextField>
-            </Box>
-          )}
-        />
+        {role === 2 || role === 3 ? (
+          <Controller
+            control={control}
+            name="institution_id"
+            render={({ field: { onChange, value } }) => (
+              <Box width="100%">
+                <CustomFormLabel htmlFor="status">Institution</CustomFormLabel>
+                <CustomTextField
+                  select
+                  value={value || ''}
+                  onChange={onChange}
+                  error={!!formErrors?.institution_id}
+                  helperText={formErrors.institution_id && formErrors.institution_id.message}
+                  variant="outlined"
+                  fullWidth
+                >
+                  {institutions.map((institution) => (
+                    <MenuItem key={institution.institution_id} value={institution.institution_id}>
+                      {institution.name}
+                    </MenuItem>
+                  ))}
+                </CustomTextField>
+              </Box>
+            )}
+          />
+        ) : null}
 
         <Controller
           control={control}
