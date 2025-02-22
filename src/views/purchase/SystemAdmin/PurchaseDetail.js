@@ -40,7 +40,7 @@ const PurchaseDetail = () => {
 
   return (
     <Box>
-      <Breadcrumb title="Institution Detail" items={BCrumb} />
+      <Breadcrumb title="Purchase Detail" items={BCrumb} />
       {purchase ? (
         <BlankCard>
           <CardContent>
