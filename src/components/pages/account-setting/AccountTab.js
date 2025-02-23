@@ -69,7 +69,7 @@ const AccountTab = () => {
         phone: userInfo.phone,
         date_of_birth: dayjs(userInfo.date_of_birth),
         role: userInfo.role,
-        institution: userInfo.institution.name || '',
+        institution: userInfo?.institution?.name || '',
         is_social: userInfo.is_social,
         social_uuid: userInfo.social_uuid,
         profile_pic: userInfo.profile_pic || [],
