@@ -12,7 +12,7 @@ const MobileSidebar = () => {
         <Stack direction="column" spacing={2}>
           <Button
             color="inherit"
-            href=""
+            href="#about"
             sx={{
               justifyContent: 'start',
             }}
@@ -21,7 +21,7 @@ const MobileSidebar = () => {
           </Button>
           <Button
             color="inherit"
-            href=""
+            href="#features"
             sx={{
               justifyContent: 'start',
             }}
@@ -30,7 +30,7 @@ const MobileSidebar = () => {
           </Button>
           <Button
             color="inherit"
-            href=""
+            href="#club-goers"
             sx={{
               justifyContent: 'start',
             }}
@@ -39,7 +39,7 @@ const MobileSidebar = () => {
           </Button>
           <Button
             color="inherit"
-            href=""
+            href="#venues"
             sx={{
               justifyContent: 'start',
             }}
@@ -48,7 +48,7 @@ const MobileSidebar = () => {
           </Button>
           <Button
             color="inherit"
-            href=""
+            href="#faq"
             sx={{
               justifyContent: 'start',
             }}
