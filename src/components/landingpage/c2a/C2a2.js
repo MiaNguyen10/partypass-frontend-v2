@@ -1,9 +1,7 @@
-import React from 'react';
 import { Grid, Typography, Box, Button, styled, Container, Stack } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 
 import c2aImg from 'src/assets/images/landingpage/background/c2a.png';
-import GuaranteeCard from './GuaranteeCard';
 
 const StyledButton = styled(Button)(({ theme }) => ({
   padding: '13px 34px',
@@ -33,25 +31,32 @@ const C2a2 = () => {
         sx={{
           pt: '60px',
           pb: '30px',
+          borderRadius: 0,
         }}
       >
         <Container maxWidth="lg">
           <Grid container justifyContent="space-between" spacing={3}>
             <Grid item xs={12} sm={12} lg={5}>
               <Typography variant="h2" color="background.paper" fontWeight={700} mt={4}>
-                Build your app with our highly customizable React based Dashboard
+                Own a club and want to join the PartyPass Revolution?
               </Typography>
 
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} mt={3}>
-                <StyledButton variant="contained" color="inherit" component={NavLink} to="/auth/login">
-                  Login
+                <StyledButton
+                  variant="contained"
+                  color="inherit"
+                  component={NavLink}
+                  to=""
+                >
+                  Register Now
                 </StyledButton>
                 <StyledButton2
                   variant="outlined"
                   color="inherit"
-                  component={NavLink} to="/auth/register"
+                  component={NavLink}
+                  to=""
                 >
-                  Register
+                  Talk to Support Team
                 </StyledButton2>
               </Stack>
             </Grid>
@@ -70,9 +75,6 @@ const C2a2 = () => {
           </Grid>
         </Container>
       </Box>
-      <Container maxWidth="lg">
-        <GuaranteeCard />
-      </Container>
     </Box>
   );
 };

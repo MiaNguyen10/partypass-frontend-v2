@@ -1,66 +1,56 @@
-import React from 'react';
-import { Avatar, Box, CardContent, Container, Typography, Rating, Stack } from '@mui/material';
+import { Box, Card, CardContent, Container, Rating, Stack, Typography } from '@mui/material';
 import TestimonialTitle from './TestimonialTitle';
-import BlankCard from '../../shared/BlankCard';
 
-import img1 from 'src/assets/images/profile/user-1.jpg';
-import img2 from 'src/assets/images/profile/user-2.jpg';
-import img3 from 'src/assets/images/profile/user-3.jpg';
+import verified_buyer_tick from 'src/assets/images/landingpage/verified_buyer.png';
 import AnimationFadeIn from '../animation/Animation';
 //Carousel slider for product
 import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.css';
 import './testimonial.css';
+import { useSelector } from 'react-redux';
 
 const SliderData = [
   {
-    title: 'Jenny Wilson',
-    subtitle: 'Features avaibility',
-    avatar: img1,
+    title: 'Mikko L.',
+    subtitle: 'Features Club-Goer',
     subtext:
-      'The dashboard template from adminmart has helped me provide a clean and sleek look to my dashboard and made it look exactly the way I wanted it to, mainly without having.',
+      'PartyPass makes my nights out so much easier! No more waiting in the cold, and I love that I can store my jacket hassle-free with automatic lockers. It’s a must-have for nightlife!',
   },
   {
-    title: 'Minshan Cui',
-    subtitle: 'Features avaibility',
-    avatar: img2,
+    title: 'Sara V.',
+    subtitle: 'Event Enthusiast',
     subtext:
-      'The quality of design is excellent, customizability and flexibility much better than the other products available in the market.I strongly recommend the AdminMart to other.',
+      'I used to dread long lines at clubs, but with PartyPass, I just scan my phone and walk in. Super convenient and fast – I won’t go back to manual tickets!',
   },
   {
-    title: 'Eminson Mendoza',
-    subtitle: 'Features avaibility',
-    avatar: img3,
+    title: 'Juha K.',
+    subtitle: 'Club Owner at Musta Harka',
     subtext:
-      'This template is great, UI-rich and up-to-date. Although it is pretty much complete, I suggest to improve a bit of documentation. Thanks & Highly recomended!',
+      'Managing club entry has never been this efficient. PartyPass helped us cut wait times by half and reduced staffing costs. Our guests love the seamless experience, and we love the real-time data tracking!',
   },
   {
-    title: 'Jenny Wilson',
-    subtitle: 'Features avaibility',
-    avatar: img1,
+    title: 'Mikko L.',
+    subtitle: 'Features Club-Goer',
     subtext:
-      'The dashboard template from adminmart has helped me provide a clean and sleek look to my dashboard and made it look exactly the way I wanted it to, mainly without having.',
+      'PartyPass makes my nights out so much easier! No more waiting in the cold, and I love that I can store my jacket hassle-free with automatic lockers. It’s a must-have for nightlife!',
   },
   {
-    title: 'Minshan Cui',
-    subtitle: 'Features avaibility',
-    avatar: img2,
+    title: 'Sara V.',
+    subtitle: 'Event Enthusiast',
     subtext:
-      'The quality of design is excellent, customizability and flexibility much better than the other products available in the market.I strongly recommend the AdminMart to other.',
+      'I used to dread long lines at clubs, but with PartyPass, I just scan my phone and walk in. Super convenient and fast – I won’t go back to manual tickets!',
   },
   {
-    title: 'Eminson Mendoza',
-    subtitle: 'Features avaibility',
-    avatar: img3,
+    title: 'Juha K.',
+    subtitle: 'Club Owner at Musta Harka',
     subtext:
-      'This template is great, UI-rich and up-to-date. Although it is pretty much complete, I suggest to improve a bit of documentation. Thanks & Highly recomended!',
+      'Managing club entry has never been this efficient. PartyPass helped us cut wait times by half and reduced staffing costs. Our guests love the seamless experience, and we love the real-time data tracking!',
   },
 ];
 
 const Testimonial = () => {
-  const [value, setValue] = React.useState(5);
-
+  const customizer = useSelector((state) => state.customizer);
   const settings = {
     className: 'testimonial-slider',
     dots: true,
@@ -71,25 +61,13 @@ const Testimonial = () => {
     slidesToScroll: 1,
     responsive: [
       {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-        },
-      },
-      {
-        breakpoint: 768,
+        breakpoint: 1160,
         settings: {
           slidesToShow: 2,
         },
       },
       {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 480,
+        breakpoint: 800,
         settings: {
           slidesToShow: 1,
         },
@@ -105,25 +83,37 @@ const Testimonial = () => {
           <AnimationFadeIn>
             <Slider {...settings}>
               {SliderData.map((slider, index) => (
-                <Box p="15px" key={index}>
-                  <BlankCard>
+                <Box p="10px" key={index}>
+                  <Card
+                    sx={{ p: 0, position: 'relative', width: '340px', height: '290px' }}
+                    elevation={customizer.isCardShadow ? 9 : 0}
+                    variant={!customizer.isCardShadow ? 'outlined' : undefined}
+                  >
                     <CardContent>
                       <Stack direction="row">
-                        <Avatar src={slider.avatar} alt="user" sx={{ width: 40, height: 40 }} />
-                        <Box ml={2}>
+                        <Box>
                           <Typography variant="h6">{slider.title}</Typography>
                           <Typography color="textSecondary" variant="subtitle1">
                             {slider.subtitle}
                           </Typography>
                         </Box>
-                        <Box ml="auto">
+                        <Box ml="auto" flexDirection="column" display="flex">
+                          <Stack direction="row" alignItems="center" gap={1}>
+                            <img
+                              src={verified_buyer_tick}
+                              alt="verified buyer"
+                              style={{ width: '15px' }}
+                            />
+                            <Typography color="textSecondary" variant="subtitle1">
+                              Verified Buyer
+                            </Typography>
+                          </Stack>
                           <Rating
                             size="small"
                             name="simple-controlled"
-                            value={value}
-                            onChange={(event, newValue) => {
-                              setValue(newValue);
-                            }}
+                            value={5}
+                            readOnly
+                            sx={{ marginLeft: '20px', marginTop: '5px' }}
                           />
                         </Box>
                       </Stack>
@@ -131,7 +121,7 @@ const Testimonial = () => {
                         {slider.subtext}
                       </Typography>
                     </CardContent>
-                  </BlankCard>
+                  </Card>
                 </Box>
               ))}
             </Slider>

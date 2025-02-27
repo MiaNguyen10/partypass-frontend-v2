@@ -1,18 +1,23 @@
-import React from 'react';
-import { Typography, Box, Button, Stack, styled, useMediaQuery } from '@mui/material';
-import { IconRocket } from '@tabler/icons';
+import { Box, Button, Stack, styled, Typography, useMediaQuery } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 // third party
 import { motion } from 'framer-motion';
+import figmaImg from 'src/assets/images/landingpage/ic_figma.png';
+import jsImg from 'src/assets/images/landingpage/ic_js.png';
+import reactImg from 'src/assets/images/landingpage/react.png';
+import tsImg from 'src/assets/images/landingpage/ic_ts.png';
+import muiImg from 'src/assets/images/landingpage/material-ui.png';
 
 const StyledButton = styled(Button)(() => ({
   padding: '13px 48px',
   fontSize: '16px',
 }));
 
-const StyledButton2 = styled(Button)(({ theme }) => ({
+const StyledButton2 = styled(Button)(() => ({
   padding: '13px 48px',
   fontSize: '16px',
+  borderColor: 'black',
+  borderWidth: '2px',
 }));
 
 const BannerContent = () => {
@@ -28,13 +33,6 @@ const BannerContent = () => {
           damping: 30,
         }}
       >
-        <Typography variant="h6" display={'flex'} gap={1} mb={2}>
-          <Typography color={'secondary'}>
-            <IconRocket size={'21'} />
-          </Typography>{' '}
-          Kick start your project with
-        </Typography>
-
         <Typography
           variant="h1"
           fontWeight={900}
@@ -47,11 +45,53 @@ const BannerContent = () => {
             },
           }}
         >
-          Most powerful &{' '}
-          <Typography component={'span'} variant="none" color={'primary'}>
-            Developer friendly
-          </Typography>{' '}
-          React dashboard
+          Skip the Line,{' '}
+        </Typography>
+        <Typography
+          variant="h1"
+          fontWeight={900}
+          sx={{
+            fontSize: {
+              md: '54px',
+            },
+            lineHeight: {
+              md: '60px',
+            },
+          }}
+        >
+          Enjoy the Party -
+        </Typography>
+        <Typography
+          variant="h1"
+          fontWeight={900}
+          sx={{
+            fontSize: {
+              md: '54px',
+            },
+            lineHeight: {
+              md: '60px',
+            },
+          }}
+        >
+          With{' '}
+          <Typography
+            variant="h1"
+            fontWeight={900}
+            component="span"
+            sx={{
+              background: 'linear-gradient(90deg, #5766C7 0%, #AF068E 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              fontSize: {
+                md: '54px',
+              },
+              lineHeight: {
+                md: '60px',
+              },
+            }}
+          >
+            PartyPass!
+          </Typography>
         </Typography>
       </motion.div>
       <Box pt={4} pb={3}>
@@ -82,14 +122,43 @@ const BannerContent = () => {
         }}
       >
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} mt={3}>
-          <StyledButton variant="contained" color="primary" to="/auth/login" component={NavLink}>
-            Login
+          <StyledButton
+            variant="contained"
+            color="primary"
+            to=""
+            component={NavLink}
+            sx={{ color: 'white', fontWeight: 700 }}
+          >
+            Join as a Venue
           </StyledButton>
 
-          <StyledButton2 variant="outlined" component={NavLink} to="/dashboards/modern">
-            Live Preview
+          <StyledButton2
+            variant="outlined"
+            component={NavLink}
+            to=""
+            sx={{ color: 'black', fontWeight: 700 }}
+          >
+            Get the App
           </StyledButton2>
         </Stack>
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, translateY: 550 }}
+        animate={{ opacity: 1, translateY: 0 }}
+        transition={{
+          type: 'spring',
+          stiffness: 150,
+          damping: 30,
+          delay: 0.6,
+        }}
+      >
+      <Stack direction="row" spacing={2} mt={3}>
+        <img src={muiImg} alt="mui" style={{ width: '23px', height: '22px' }} />
+        <img src={figmaImg} alt="figma" style={{ width: '23px', height: '22px' }} />
+        <img src={reactImg} alt="react" style={{ width: '23px', height: '22px' }} />
+        <img src={jsImg} alt="js" style={{ width: '23px', height: '22px' }} />
+        <img src={tsImg} alt="ts" style={{ width: '23px', height: '22px' }} />
+      </Stack>
       </motion.div>
     </Box>
   );

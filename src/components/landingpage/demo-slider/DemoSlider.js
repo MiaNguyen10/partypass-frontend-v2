@@ -1,152 +1,50 @@
-import React from 'react';
-import { Box, Container, Button, styled, Typography, Grid, Avatar,  Chip } from '@mui/material';
+import { Box, Card, CardContent, Container, Typography } from '@mui/material';
 
 import DemoTitle from './DemoTitle';
+import AnimationFadeIn from '../animation/Animation';
 
 // images
-import mainDemo from 'src/assets/images/landingpage/demos/demo-main.jpg';
-import darkDemo from 'src/assets/images/landingpage/demos/demo-dark.jpg';
-import horizontalDemo from 'src/assets/images/landingpage/demos/demo-horizontal.jpg';
-import minisidebarDemo from 'src/assets/images/landingpage/demos/demo-firebase.jpg';
-import rtlDemo from 'src/assets/images/landingpage/demos/demo-rtl.jpg';
-
-import app1 from 'src/assets/images/landingpage/apps/app-calendar.jpg';
-import app2 from 'src/assets/images/landingpage/apps/app-chat.jpg';
-import app3 from 'src/assets/images/landingpage/apps/app-contact.jpg';
-import app4 from 'src/assets/images/landingpage/apps/app-email.jpg';
-import app5 from 'src/assets/images/landingpage/apps/app-note.jpg';
-import app6 from 'src/assets/images/landingpage/apps/app-user-profile.jpg';
-import app7 from 'src/assets/images/landingpage/apps/app-blog.jpg';
-import app8 from 'src/assets/images/landingpage/apps/app-ticket.jpg';
-import app9 from 'src/assets/images/landingpage/apps/app-ecommerce-shop.jpg';
-import app10 from 'src/assets/images/landingpage/apps/app-ecommerce-detail.jpg';
-import app11 from 'src/assets/images/landingpage/apps/app-ecommerce-checkout.jpg';
-import app12 from 'src/assets/images/landingpage/apps/app-ecommerce-list.jpg';
-import app13 from 'src/assets/images/landingpage/apps/app-blog-detail.jpg';
-
-const StyledBox = styled(Box)(() => ({
-  overflow: 'auto',
-  position: 'relative',
-  '.MuiButton-root': {
-    display: 'none',
-  },
-  '&:hover': {
-    '.MuiButton-root': {
-      display: 'block',
-      transform: 'translate(-50%,-50%)',
-      position: 'absolute',
-      left: '50%',
-      right: '50%',
-      top: '50%',
-      minWidth: '100px',
-      zIndex: '9',
-    },
-    '&:before': {
-      content: '""',
-      position: 'absolute',
-      top: '0',
-      left: ' 0',
-      width: '100%',
-      height: '100%',
-      zIndex: '8',
-      backgroundColor: 'rgba(55,114,255,.2)',
-    },
-  },
-}));
+import cloudBased from 'src/assets/images/landingpage/cloud_based.png';
+import lockerAssignment from 'src/assets/images/landingpage/locker.png';
+import paperlessSytem from 'src/assets/images/landingpage/paperless.png';
+import realTimeTrackingImg from 'src/assets/images/landingpage/real_time.png';
+import securePayment from 'src/assets/images/landingpage/secure.png';
 
 const demos = [
   {
-    link: 'https://modernize-react-main.netlify.app/dashboards/modern',
-    img: mainDemo,
-    title: 'Main',
+    backgroundColor: '#FFEEF9',
+    img: realTimeTrackingImg,
+    alt: 'Real-Time Tracking',
+    title: 'Real-Time Tracking',
+    color: '#F50D51',
   },
   {
-    link: 'https://modernize-react-dark.netlify.app/dashboards/ecommerce',
-    img: darkDemo,
-    title: 'Dark',
+    backgroundColor: '#E8F6F0',
+    img: lockerAssignment,
+    alt: 'Locker Assignment',
+    title: 'Locker Assignment',
+    color: '#2D9566',
   },
   {
-    link: 'https://modernize-react-horizontal.netlify.app/dashboards/modern',
-    img: horizontalDemo,
-    title: 'Horizontal',
+    backgroundColor: '#F1E7FB',
+    img: securePayment,
+    alt: 'Secure Payments',
+    title: 'Secure Payments',
+    color: '#7811F5',
   },
   {
-    link: 'https://modernize-react-firebase.netlify.app/auth/login',
-    img: minisidebarDemo,
-    title: 'Firebase',
+    backgroundColor: '#E3F4FF',
+    img: cloudBased,
+    alt: 'Cloud-Based',
+    title: 'Cloud-Based',
+    color: '#2F495E',
   },
   {
-    link: 'https://modernize-react-rtl.netlify.app/dashboards/modern',
-    img: rtlDemo,
-    title: 'RTL',
-  },
-];
-
-const apps = [
-  {
-    link: '/apps/calendar',
-    img: app1,
-    title: 'Calendar App',
-  },
-  {
-    link: '/apps/chats',
-    img: app2,
-    title: 'Chat App',
-  },
-  {
-    link: 'apps/contacts',
-    img: app3,
-    title: 'Contact App',
-  },
-  {
-    link: 'apps/email',
-    img: app4,
-    title: 'Email App',
-  },
-  {
-    link: '/apps/notes',
-    img: app5,
-    title: 'Note App',
-  },
-  {
-    link: '/apps/user-profile',
-    img: app6,
-    title: 'User Profile App',
-  },
-  {
-    link: '/apps/blog/posts',
-    img: app7,
-    title: 'Blog App',
-  },
-  {
-    link: '/apps/blog/detail/streaming-video-way-before-it-was-cool-go-dark-tomorrow',
-    img: app13,
-    title: 'Blog Detail App',
-  },
-  {
-    link: '/apps/tickets',
-    img: app8,
-    title: 'Ticket App',
-  },
-  {
-    link: '/apps/ecommerce/shop',
-    img: app9,
-    title: 'eCommerce Shop App',
-  },
-  {
-    link: '/apps/ecommerce/detail/1',
-    img: app10,
-    title: 'eCommerce Detail App',
-  },
-  {
-    link: '/apps/ecommerce/eco-checkout',
-    img: app11,
-    title: 'eCommerce Checkout App',
-  },
-  {
-    link: '/apps/ecommerce/eco-product-list',
-    img: app12,
-    title: 'eCommerce List App',
+    backgroundColor: '#EAFBF8',
+    img: paperlessSytem,
+    alt: 'Paperless System',
+    title: 'Paperless System',
+    color: '#2F495E',
   },
 ];
 
@@ -167,87 +65,51 @@ const DemoSlider = () => {
         <DemoTitle />
 
         {/* slider */}
-        <Box mt={9}>
-          <Grid container spacing={3} justifyContent="center">
-            {demos.map((demo, index) => (
-              <Grid item xs={12} lg={3} key={index}>
-                <Box>
-                  {/* <Link href={demo.link}> */}
-                  <StyledBox>
-                    <Avatar
-                      src={demo.img}
-                      sx={{
-                        borderRadius: '8px',
-                        width: '100%',
-                        height: '100%',
-                      }}
-                    />
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="small"
-                      href={demo.link}
-                      target="_blank"
-                    >
-                      Live Preview
-                    </Button>
-                  </StyledBox>
-                  {/* </Link> */}
-                  <Typography
-                    variant="body1"
-                    color="textPrimary"
-                    textAlign="center"
-                    fontWeight={500}
-                    mt={2}
+        <AnimationFadeIn>
+          <Box mt={9}>
+            <Box display="flex" justifyContent="center" gap={4} flexWrap="wrap">
+              {demos.map((demo, index) => (
+                <Card
+                  key={index}
+                  sx={{
+                    width: 200,
+                    height: 180,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: 3,
+                    backgroundColor: demo.backgroundColor,
+                  }}
+                >
+                  <CardContent
+                    sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
                   >
-                    {demo.title}
-                  </Typography>
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
-          <Box mb={2} mt={5} textAlign="center">
-          <Chip label="Apps" color="primary" />
+                    <img
+                      src={demo.img}
+                      alt={demo.alt}
+                      style={{ width: 50, height: 48, marginBottom: 8 }}
+                    />
+                    <Typography
+                      variant="body1"
+                      align="center"
+                      color={demo.color}
+                      sx={{
+                        whiteSpace: { xs: 'normal', lg: 'nowrap' },
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        maxWidth: '100%',
+                        marginTop: 2,
+                      }}
+                    >
+                      {demo.title}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              ))}
+            </Box>
           </Box>
-          <Grid container spacing={3} justifyContent="center">
-            {apps.map((demo, index) => (
-              <Grid item xs={12} lg={3} key={index}>
-                <Box>
-                  {/* <Link href={demo.link}> */}
-                  <StyledBox>
-                    <Avatar
-                      src={demo.img}
-                      sx={{
-                        borderRadius: '8px',
-                        width: '100%',
-                        height: '100%',
-                      }}
-                    />
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="small"
-                      href={demo.link}
-                      target="_blank"
-                    >
-                      Live Preview
-                    </Button>
-                  </StyledBox>
-                  {/* </Link> */}
-                  <Typography
-                    variant="body1"
-                    color="textPrimary"
-                    textAlign="center"
-                    fontWeight={500}
-                    mt={2}
-                  >
-                    {demo.title}
-                  </Typography>
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
+        </AnimationFadeIn>
       </Container>
     </Box>
   );

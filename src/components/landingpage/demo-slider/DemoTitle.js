@@ -1,10 +1,9 @@
-import React from 'react';
 import { Grid, Typography, AvatarGroup, Avatar, Stack } from '@mui/material';
 import AnimationFadeIn from '../animation/Animation';
 // images
-import img1 from 'src/assets/images/profile/user-1.jpg';
-import img2 from 'src/assets/images/profile/user-2.jpg';
-import img3 from 'src/assets/images/profile/user-3.jpg';
+import img1 from 'src/assets/images/landingpage/profile/user1.png';
+import img2 from 'src/assets/images/landingpage/profile/user2.png';
+import img3 from 'src/assets/images/landingpage/profile/user3.png';
 
 const DemoTitle = () => {
   return (
@@ -23,9 +22,20 @@ const DemoTitle = () => {
               <Avatar alt="Travis Howard" src={img2} sx={{ width: 28, height: 28 }} />
               <Avatar alt="Cindy Baker" src={img3} sx={{ width: 28, height: 28 }} />
             </AvatarGroup>
-            <Typography variant="h6">52,589+</Typography>
-            <Typography variant="h6" color="textSecondary">
-              developers & agencies using our templates
+            <Typography
+              variant="h6"
+              sx={{
+                fontSize: {
+                  lg: '16px',
+                  xs: '14px',
+                  textAlign: 'center',
+                },
+              }}
+            >
+              10+{' '}
+              <Typography variant="inherit" fontWeight={100} component={'span'}>
+                event-goers are using PartyPass for a seamless nightlife experience!
+              </Typography>
             </Typography>
           </Stack>
           <Typography
@@ -43,7 +53,32 @@ const DemoTitle = () => {
               },
             }}
           >
-            Production Ready & Developer Friendly Material UI React Admin Template
+            Smart. Scalable. Seamless <br /> Powering Next-Gen Event Access
+          </Typography>
+          <Typography
+            textAlign="center"
+            fontWeight={100}
+            mt={2}
+            sx={{
+              fontSize: {
+                lg: '15px',
+                xs: '12px',
+              },
+              lineHeight: {
+                lg: '25px',
+                xs: '15px',
+              },
+            }}
+          >
+            Behind every smooth club entry is a powerful system. PartyPass is built with{' '}
+            <Typography component="span" color="#5D87FF" variant="inherit">
+              speed, automation,
+            </Typography>{' '}
+            and{' '}
+            <Typography component="span" color="#5D87FF" variant="inherit">
+              scalability
+            </Typography>{' '}
+            in mind— designed to handle high-volume venues while keeping operations simple.
           </Typography>
         </AnimationFadeIn>
       </Grid>

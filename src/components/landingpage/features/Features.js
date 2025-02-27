@@ -1,130 +1,316 @@
-import React from 'react';
-import FeaturesTitle from './FeaturesTitle';
-import { Typography, Grid, Container, Box } from '@mui/material';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
-  IconAdjustments,
-  IconArchive,
-  IconArrowsShuffle,
-  IconBook,
-  IconBuildingCarousel,
-  IconCalendar,
-  IconChartPie,
-  IconDatabase,
-  IconDiamond,
-  IconLanguageKatakana,
-  IconLayersIntersect,
-  IconMessages,
-  IconRefresh,
-  IconShieldLock,
-  IconTag,
-  IconWand,
-} from '@tabler/icons';
-import AnimationFadeIn from '../animation/Animation';
+  Box,
+  Collapse,
+  Container,
+  Grid,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+} from '@mui/material';
+import { useState } from 'react';
+import FeaturesTitle from './FeaturesTitle';
 
-const featuresData = [
+const faqData1 = [
   {
-    icon: <IconWand width={40} height={40} strokeWidth={1.5} />,
-    title: '6 Theme Colors',
-    subtext: 'We have included 6 pre-defined Theme Colors with Elegant Admin.',
+    id: 1,
+    question: 'How does PartyPass improve event entry?',
+    answer: () => {
+      return (
+        <Typography>
+          PartyPass replaces{' '}
+          <Typography component="span" fontWeight="bold">
+            manual ticketing with QR code-based entry,
+          </Typography>{' '}
+          reducing long lines and speeding up check-ins. It also{' '}
+          <Typography component="span" fontWeight="bold">
+            automates locker allocation,
+          </Typography>{' '}
+          eliminating the hassle of physical tokens.
+        </Typography>
+      );
+    },
   },
   {
-    icon: <IconShieldLock width={40} height={40} strokeWidth={1.5} />,
-    title: 'JWT + Firebase Auth',
-    subtext: 'It is JSON Object is used to securely transfer information over the web.',
+    id: 2,
+    question: 'Can venue managers track ticket sales and check-ins in real time?',
+    answer: () => {
+      return (
+        <Typography>
+          Yes! PartyPass provides{' '}
+          <Typography component="span" fontWeight="bold">
+            a live dashboard
+          </Typography>{' '}
+          where venue managers can{' '}
+          <Typography component="span" fontWeight="bold">
+            monitor ticket sales, check-in status, and locker usage,
+          </Typography>{' '}
+          all in real time.
+        </Typography>
+      );
+    },
   },
   {
-    icon: <IconArchive width={40} height={40} strokeWidth={1.5} />,
-    title: '50+ Page Templates',
-    subtext: 'Yes, we have 5 demos & 50+ Pages per demo to make it easier.',
+    id: 3,
+    question: 'Is PartyPass secure for payments and data?',
+    answer: () => {
+      return (
+        <Typography>
+          Absolutely. PartyPass uses{' '}
+          <Typography component="span" fontWeight="bold">
+            secure digital payments
+          </Typography>{' '}
+          and encrypts user data to{' '}
+          <Typography component="span" fontWeight="bold">
+            protect transactions and personal information.
+          </Typography>
+        </Typography>
+      );
+    },
+  },
+];
+
+const faqData2 = [
+  {
+    id: 4,
+    question: 'Can customers buy tickets in advance or for any date?',
+    answer: () => {
+      return (
+        <Typography>
+          Yes! Users can purchase tickets{' '}
+          <Typography component="span" fontWeight="bold">
+            in advance
+          </Typography>{' '}
+          and use them whenever they like, offering{' '}
+          <Typography component="span" fontWeight="bold">
+            flexibility without a fixed date requirement.
+          </Typography>
+        </Typography>
+      );
+    },
   },
   {
-    icon: <IconAdjustments width={40} height={40} strokeWidth={1.5} />,
-    title: '45+ UI Components',
-    subtext: 'Almost 45+ UI Components being given with Modernize Admin Pack.',
+    id: 5,
+    question: 'How does PartyPass help reduce staffing costs?',
+    answer: () => {
+      return (
+        <Typography>
+          By automating ticketing, check-ins, and locker assignments,{' '}
+          <Typography component="span" fontWeight="bold">
+            venues need fewer staff members
+          </Typography>{' '}
+          to manage the entry process, cutting operational costs.
+        </Typography>
+      );
+    },
   },
   {
-    icon: <IconTag width={40} height={40} strokeWidth={1.5} />,
-    title: 'Material Ui',
-    subtext: 'Its been made with Material Ui and full responsive layout.',
-  },
-  {
-    icon: <IconDiamond width={40} height={40} strokeWidth={1.5} />,
-    title: '3400+ Font Icons',
-    subtext: 'Lots of Icon Fonts are included here in the package of Elegant Admin.',
-  },
-  {
-    icon: <IconDatabase width={40} height={40} strokeWidth={1.5} />,
-    title: 'Axios',
-    subtext: 'Axios is a promise-based HTTP Client for node.js and the browser.',
-  },
-  {
-    icon: <IconLanguageKatakana width={40} height={40} strokeWidth={1.5} />,
-    title: 'i18 React',
-    subtext: 'react-i18 is a powerful internationalization framework for React.',
-  },
-  {
-    icon: <IconBuildingCarousel width={40} height={40} strokeWidth={1.5} />,
-    title: 'Slick Carousel',
-    subtext: 'The Last React Carousel You will Ever Need!',
-  },
-  {
-    icon: <IconArrowsShuffle width={40} height={40} strokeWidth={1.5} />,
-    title: 'Easy to Customize',
-    subtext: 'Customization will be easy as we understand your pain.',
-  },
-  {
-    icon: <IconChartPie width={40} height={40} strokeWidth={1.5} />,
-    title: 'Lots of Chart Options',
-    subtext: 'You name it and we have it, Yes lots of variations for Charts.',
-  },
-  {
-    icon: <IconLayersIntersect width={40} height={40} strokeWidth={1.5} />,
-    title: 'Lots of Table Examples',
-    subtext: 'Data Tables are initial requirement and we added them.',
-  },
-  {
-    icon: <IconRefresh width={40} height={40} strokeWidth={1.5} />,
-    title: 'Regular Updates',
-    subtext: 'We are constantly updating our pack with new features.',
-  },
-  {
-    icon: <IconBook width={40} height={40} strokeWidth={1.5} />,
-    title: 'Detailed Documentation',
-    subtext: 'We have made detailed documentation, so it will easy to use.',
-  },
-  {
-    icon: <IconCalendar width={40} height={40} strokeWidth={1.5} />,
-    title: 'Calendar Design',
-    subtext: 'Calendar is available with our package & in nice design.',
-  },
-  {
-    icon: <IconMessages width={40} height={40} strokeWidth={1.5} />,
-    title: 'Dedicated Support',
-    subtext: 'We believe in supreme support is key and we offer that.',
+    id: 6,
+    question: 'Is PartyPass only for clubs, or can other events use it?',
+    answer: () => {
+      return (
+        <Typography>
+          PartyPass is{' '}
+          <Typography component="span" fontWeight="bold">
+            scalable for any event-based venue,
+          </Typography>{' '}
+          including{' '}
+          <Typography component="span" fontWeight="bold">
+            concerts, festivals, and private parties,
+          </Typography>{' '}
+          making it a versatile solution for all event organizers.
+        </Typography>
+      );
+    },
   },
 ];
 
 const Features = () => {
+  const [openId, setOpenId] = useState(null);
+
+  const handleToggle = (id) => {
+    setOpenId(openId === id ? null : id);
+  };
+
   return (
     <Box py={6}>
       <Container maxWidth="lg">
         <FeaturesTitle />
-
         <Box mt={6}>
-          <Grid container spacing={3}>
-            {featuresData.map((feature, index) => (
-              <Grid item xs={12} sm={4} lg={3} textAlign="center" key={index}>
-                <AnimationFadeIn>
-                  <Box color="primary.main">{feature.icon}</Box>
-                  <Typography variant="h5" mt={3}>
-                    {feature.title}
-                  </Typography>
-                  <Typography variant="subtitle1" color="textSecondary" mt={1} mb={3}>
-                    {feature.subtext}
-                  </Typography>
-                </AnimationFadeIn>
-              </Grid>
-            ))}
+          <Grid container spacing={{ xs: 0, lg: 3 }}>
+            {/* First Column */}
+            <Grid item xs={12} lg={6}>
+              <List>
+                {faqData1.map((faq) => (
+                  <Box
+                    key={faq.id}
+                    sx={{
+                      mb: 2,
+                      borderRadius: '12px',
+                      overflow: 'hidden',
+                      boxShadow: openId === faq.id ? '0 4px 10px rgba(0,0,0,0.1)' : 'none',
+                      transition: '0.3s',
+                    }}
+                  >
+                    {/* Question Section */}
+                    <ListItem
+                      button
+                      onClick={() => handleToggle(faq.id)}
+                      sx={{
+                        backgroundColor: openId === faq.id ? '#F8FAFC' : '#fff',
+                        padding: '16px',
+                        borderRadius: '12px',
+                        border: '1px solid #E2E8F0',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        width: '100%',
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px',
+                          width: '100%',
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            width: '30px',
+                            height: '30px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: openId === faq.id ? '#3B82F6' : '#E5E7EB',
+                            color: openId === faq.id ? '#fff' : '#374151',
+                            fontWeight: 'bold',
+                            borderRadius: '50%',
+                          }}
+                        >
+                          {faq.id < 10 ? `0${faq.id}` : faq.id}
+                        </Typography>
+                        <ListItemText
+                          primary={faq.question}
+                          sx={{ color: '#111827', fontWeight: 'bold', flex: 1 }}
+                        />
+                        <IconButton>
+                          {openId === faq.id ? (
+                            <ExpandLessIcon sx={{ color: '#3B82F6' }} />
+                          ) : (
+                            <ExpandMoreIcon sx={{ color: '#9CA3AF' }} />
+                          )}
+                        </IconButton>
+                      </Box>
+                    </ListItem>
+                    {/* Answer Section (Collapsible) */}
+                    <Collapse in={openId === faq.id} timeout="auto" unmountOnExit>
+                      <Box
+                        sx={{
+                          padding: '16px',
+                          backgroundColor: '#F8FAFC',
+                          borderRadius: '0 0 12px 12px',
+                          color: '#374151',
+                          width: '100%',
+                          border: '1px solid #E2E8F0',
+                          borderTop: 'none',
+                        }}
+                      >
+                        {typeof faq.answer === 'function' ? faq.answer() : faq.answer}
+                      </Box>
+                    </Collapse>
+                  </Box>
+                ))}
+              </List>
+            </Grid>
+            {/* Second Column */}
+            <Grid item xs={12} lg={6}>
+              <List>
+                {faqData2.map((faq) => (
+                  <Box
+                    key={faq.id}
+                    sx={{
+                      mb: 2,
+                      borderRadius: '12px',
+                      overflow: 'hidden',
+                      boxShadow: openId === faq.id ? '0 4px 10px rgba(0,0,0,0.1)' : 'none',
+                      transition: '0.3s',
+                    }}
+                  >
+                    {/* Question Section */}
+                    <ListItem
+                      button
+                      onClick={() => handleToggle(faq.id)}
+                      sx={{
+                        backgroundColor: openId === faq.id ? '#F8FAFC' : '#fff',
+                        padding: '16px',
+                        borderRadius: '12px',
+                        border: '1px solid #E2E8F0',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        width: '100%',
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px',
+                          width: '100%',
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            width: '30px',
+                            height: '30px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: openId === faq.id ? '#3B82F6' : '#E5E7EB',
+                            color: openId === faq.id ? '#fff' : '#374151',
+                            fontWeight: 'bold',
+                            borderRadius: '50%',
+                          }}
+                        >
+                          {faq.id < 10 ? `0${faq.id}` : faq.id}
+                        </Typography>
+                        <ListItemText
+                          primary={faq.question}
+                          sx={{ color: '#111827', fontWeight: 'bold', flex: 1 }}
+                        />
+                        <IconButton>
+                          {openId === faq.id ? (
+                            <ExpandLessIcon sx={{ color: '#3B82F6' }} />
+                          ) : (
+                            <ExpandMoreIcon sx={{ color: '#9CA3AF' }} />
+                          )}
+                        </IconButton>
+                      </Box>
+                    </ListItem>
+                    {/* Answer Section (Collapsible) */}
+                    <Collapse in={openId === faq.id} timeout="auto" unmountOnExit>
+                      <Box
+                        sx={{
+                          padding: '16px',
+                          backgroundColor: '#F8FAFC',
+                          borderRadius: '0 0 12px 12px',
+                          color: '#374151',
+                          width: '100%',
+                          border: '1px solid #E2E8F0',
+                          borderTop: 'none',
+                        }}
+                      >
+                        {typeof faq.answer === 'function' ? faq.answer() : faq.answer}
+                      </Box>
+                    </Collapse>
+                  </Box>
+                ))}
+              </List>
+            </Grid>
           </Grid>
         </Box>
       </Container>

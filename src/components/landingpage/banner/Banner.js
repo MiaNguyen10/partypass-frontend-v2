@@ -1,37 +1,11 @@
-import React from 'react';
-import { Grid, Box, Container, useMediaQuery, styled, Stack } from '@mui/material';
+import { Box, Container, Grid, Stack, useMediaQuery } from '@mui/material';
 import BannerContent from './BannerContent';
-import bannerbgImg1 from 'src/assets/images/landingpage/bannerimg1.svg';
-import bannerbgImg2 from 'src/assets/images/landingpage/bannerimg2.svg';
+import mobileImg1 from 'src/assets/images/landingpage/mobile_app_1.png';
+import mobileImg2 from 'src/assets/images/landingpage/mobile_app_2.png';
 
 const Banner = () => {
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('md'));
 
-  const SliderBox = styled(Box)(() => ({
-    '@keyframes slideup': {
-      '0%': {
-        transform: 'translate3d(0, 0, 0)',
-      },
-      '100% ': {
-        transform: 'translate3d(0px, -100%, 0px)',
-      },
-    },
-
-    animation: 'slideup 35s linear infinite',
-  }));
-
-  const SliderBox2 = styled(Box)(() => ({
-    '@keyframes slideDown': {
-      '0%': {
-        transform: 'translate3d(0, -100%, 0)',
-      },
-      '100% ': {
-        transform: 'translate3d(0px, 0, 0px)',
-      },
-    },
-
-    animation: 'slideDown 35s linear infinite',
-  }));
   return (
     <Box mb={10} sx={{ overflow: 'hidden' }}>
       <Container maxWidth="lg">
@@ -45,28 +19,41 @@ const Banner = () => {
                 p={3.2}
                 sx={{
                   backgroundColor: (theme) => theme.palette.primary.light,
-                  minWidth: '2000px',
+                  minWidth: '900px',
                   height: 'calc(100vh - 100px)',
-                  maxHeight: '790px',
+                  maxHeight: '850px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}
               >
-                <Stack direction={'row'}>
-                  <Box>
-                    <SliderBox>
-                      <img src={bannerbgImg1} alt="banner" />
-                    </SliderBox>
-                    <SliderBox>
-                      <img src={bannerbgImg1} alt="banner" />
-                    </SliderBox>
-                  </Box>
-                  <Box>
-                    <SliderBox2>
-                      <img src={bannerbgImg2} alt="banner" />
-                    </SliderBox2>
-                    <SliderBox2>
-                      <img src={bannerbgImg2} alt="banner" />
-                    </SliderBox2>
-                  </Box>
+                <Stack direction={'row'} spacing={4} justifyContent="center" alignItems="center">
+                  <Box
+                    component="img"
+                    src={mobileImg1}
+                    alt="mobile app 1"
+                    style={{
+                      width: '100%',
+                      maxWidth: '500px',
+                    }}
+                    sx={{
+                      height: { lg: '400px', xl: '550px' },
+                      '@media (min-width: 1920px)': { height: '100%' }
+                    }}
+                  />
+                  <Box
+                    component="img"
+                    src={mobileImg2}
+                    alt="mobile app 2"
+                    style={{
+                      width: '100%',
+                      maxWidth: '500px',
+                    }}
+                    sx={{
+                      height: { lg: '400px', xl: '550px' },
+                      '@media (min-width: 1920px)': { height: '100%' }
+                    }}
+                  />
                 </Stack>
               </Box>
             </Grid>
