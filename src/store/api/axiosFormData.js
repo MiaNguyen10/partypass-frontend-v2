@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosFormData = axios.create({
-  baseURL: "https://partypass-server.onrender.com",
+  baseURL: "https://partypass-server2.vercel.app",
   headers: {
     "Content-Type": "multipart/form-data",
     Accept: "*/*",
