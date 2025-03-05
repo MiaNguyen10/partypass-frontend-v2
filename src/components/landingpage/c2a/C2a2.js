@@ -46,7 +46,9 @@ const C2a2 = () => {
                   variant="contained"
                   color="inherit"
                   component={NavLink}
-                  to=""
+                  to="https://forms.gle/Pj3eAVbDivkZR1ck6"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   Register Now
                 </StyledButton>

@@ -1,12 +1,13 @@
-import { Button, FormControlLabel, MenuItem, TextField } from '@mui/material';
+import { Button, FormControlLabel, IconButton, MenuItem, TextField } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { IconEye, IconEyeOff } from '@tabler/icons';
 import CustomCheckbox from '../../components/forms/theme-elements/CustomCheckbox';
 import CustomFormLabel from '../../components/forms/theme-elements/CustomFormLabel';
 import CustomTextField from '../../components/forms/theme-elements/CustomTextField';
@@ -33,6 +34,10 @@ const UserForm = ({
   const institutions = useSelector(getInstitutions);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = React.useState(false);
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   useEffect(() => {
     dispatch(getInstitutionList());
@@ -184,13 +189,20 @@ const UserForm = ({
             <Box>
               <CustomFormLabel htmlFor="password">Password</CustomFormLabel>
               <CustomTextField
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 value={value}
                 onChange={onChange}
                 error={!!formErrors.password}
                 helperText={formErrors.password && formErrors.password.message}
                 variant="outlined"
                 fullWidth
+                InputProps={{
+                  endAdornment: (
+                    <IconButton size="small" onClick={handleClickShowPassword}>
+                      {showPassword ? <IconEye size="1.1rem" /> : <IconEyeOff size="1.1rem" />}
+                    </IconButton>
+                  ),
+                }}
               />
             </Box>
           )}

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Grid, Typography } from '@mui/material';
 import AnimationFadeIn from '../animation/Animation';
 
@@ -22,7 +21,7 @@ const TestimonialTitle = () => {
               },
             }}
           >
-            Don’t just take our words for it, See what the users are saying
+            Don’t just take our words for it. <br />See what the users are saying
           </Typography>
         </AnimationFadeIn>
       </Grid>

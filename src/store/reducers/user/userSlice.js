@@ -33,7 +33,7 @@ const initialState = {
     phone: '',
     role: '',
     is_social: false,
-    institution_id: '',
+    institution: {},
     date_of_birth: '',
     social_uuid: '',
     profile_pic: '',

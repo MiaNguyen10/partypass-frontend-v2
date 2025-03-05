@@ -4,6 +4,7 @@ import {
   CardContent,
   FormControlLabel,
   Grid,
+  IconButton,
   Stack,
   TextField,
   Typography,
@@ -19,21 +20,27 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
+import { IconEye, IconEyeOff } from '@tabler/icons';
 import { roles, validFileExtensions } from '../../../config/Constant';
 import { getUserLogin } from '../../../store/reducers/user/userSlice';
 import { getUserInformation, updateUser } from '../../../store/thunk/user';
 import PreviewFile from '../../../views/institution/PreviewFile';
-import schemaUser from '../../../views/user/schemaUser';
 import CustomCheckbox from '../../forms/theme-elements/CustomCheckbox';
+import schemaUser from './schemaUser';
 
 const AccountTab = () => {
   const dispatch = useDispatch();
   const userInfo = useSelector(getUserLogin);
   const fileInputRef = useRef(null);
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   useEffect(() => {
     dispatch(getUserInformation());
@@ -52,9 +59,10 @@ const AccountTab = () => {
       name: '',
       email: '',
       phone: '',
+      password: '',
       date_of_birth: dayjs(),
       role: '',
-      institution_id: '',
+      institution: '',
       is_social: false,
       social_uuid: '',
       profile_pic: [],
@@ -81,7 +89,7 @@ const AccountTab = () => {
   const onSubmit = (data) => {
     const userData = {
       ...data,
-      institution_id: parseInt(data.institution_id, 10),
+      institution_id: parseInt(userInfo?.institution?.institution_id, 10),
       role: parseInt(data.role, 10),
       is_social: data.is_social ? 1 : 0,
     };
@@ -102,25 +110,28 @@ const AccountTab = () => {
     });
 
     dispatch(updateUser({ userData: formData }))
-      .then(() => {
-        dispatch(getUserInformation());
-        // Reset the file input
-        if (fileInputRef.current) {
-          fileInputRef.current.value = null;
+      .then((resultAction) => {
+        if (updateUser.fulfilled.match(resultAction)) {
+          dispatch(getUserInformation());
+          // Reset the file input
+          if (fileInputRef.current) {
+            fileInputRef.current.value = null;
+          }
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'User has been updated',
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'User update failed!',
+          });
         }
-        Swal.fire({
-          icon: 'success',
-          title: 'Success',
-          text: 'User has been updated',
-        });
       })
       .catch((error) => {
         console.error(error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'User update failed!',
-        });
       });
   };
 
@@ -187,13 +198,24 @@ const AccountTab = () => {
                           Password
                         </CustomFormLabel>
                         <CustomTextField
-                          type="password"
+                          type={showPassword ? 'text' : 'password'}
                           value={value}
                           onChange={onChange}
                           error={!!formErrors.password}
                           helperText={formErrors.password && formErrors.password.message}
                           variant="outlined"
                           fullWidth
+                          InputProps={{
+                            endAdornment: (
+                              <IconButton size="small" onClick={handleClickShowPassword}>
+                                {showPassword ? (
+                                  <IconEye size="1.1rem" />
+                                ) : (
+                                  <IconEyeOff size="1.1rem" />
+                                )}
+                              </IconButton>
+                            ),
+                          }}
                         />
                       </Box>
                     )}
@@ -320,28 +342,18 @@ const AccountTab = () => {
                     <Grid item xs={12} sm={6}>
                       <Controller
                         control={control}
-                        name="institution_id"
-                        render={({ field: { onChange, value } }) => (
+                        name="institution"
+                        render={({ field: { value } }) => (
                           <Box>
                             <CustomFormLabel
                               sx={{
                                 mt: 0,
                               }}
-                              htmlFor="institution_id"
+                              htmlFor="institution"
                             >
                               Institution
                             </CustomFormLabel>
-                            <CustomTextField
-                              value={value}
-                              onChange={onChange}
-                              error={!!formErrors.institution_id}
-                              helperText={
-                                formErrors.institution_id && formErrors.institution_id.message
-                              }
-                              variant="outlined"
-                              fullWidth
-                              disabled
-                            />
+                            <CustomTextField value={value} variant="outlined" fullWidth disabled />
                           </Box>
                         )}
                       />

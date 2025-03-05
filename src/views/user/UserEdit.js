@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { loading_status } from '../../config/Constant';
+import { loading_status, roles } from '../../config/Constant';
 import Breadcrumb from '../../layouts/full/shared/breadcrumb/Breadcrumb';
 import { getUser } from '../../store/reducers/user/userSlice';
 import { getUserById, updateUserById } from '../../store/thunk/user';
@@ -84,7 +84,7 @@ const UserEdit = () => {
   const onSubmit = (data) => {
     const userData = {
       ...data,
-      institution_id: parseInt(data.institution_id, 10),
+      institution_id: data.role === roles[1].id ? null : parseInt(data.institution_id, 10),
       role: parseInt(data.role, 10),
       is_social: data.is_social ? 1 : 0,
     };

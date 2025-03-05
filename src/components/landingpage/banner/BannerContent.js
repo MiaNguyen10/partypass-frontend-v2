@@ -125,8 +125,10 @@ const BannerContent = () => {
           <StyledButton
             variant="contained"
             color="primary"
-            to=""
+            to="https://forms.gle/Pj3eAVbDivkZR1ck6"
             component={NavLink}
+            target="_blank"
+            rel="noopener noreferrer"
             sx={{ color: 'white', fontWeight: 700 }}
           >
             Join as a Venue
