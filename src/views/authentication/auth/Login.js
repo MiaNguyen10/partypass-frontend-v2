@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router';
 import img1 from 'src/assets/images/backgrounds/login-bg.png';
 import PageContainer from 'src/components/container/PageContainer';
 import Logo from 'src/layouts/full/shared/logo/Logo';
-import { passwordRegExp } from '../../../config/regexFormat';
 import { authenticate } from '../../../store/thunk/authenticate';
 import AuthLogin from '../authForms/AuthLogin';
 
@@ -54,10 +53,21 @@ const Login = () => {
       setUsernameErrorMessage('');
     }
 
-    if (!password || !passwordRegExp.test(password)) {
+    // if (!password || !passwordRegExp.test(password)) {
+    //   setPasswordError(true);
+    //   setPasswordErrorMessage(
+    //     'Password must be at least 6 characters long, have at least one uppercase letter, one lowercase letter, one number, and one special character.',
+    //   );
+    //   isValid = false;
+    // } else {
+    //   setPasswordError(false);
+    //   setPasswordErrorMessage('');
+    // }
+
+    if (!password) {
       setPasswordError(true);
       setPasswordErrorMessage(
-        'Password must be at least 6 characters long, have at least one uppercase letter, one lowercase letter, one number, and one special character.',
+        'Please enter password',
       );
       isValid = false;
     } else {

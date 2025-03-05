@@ -1,6 +1,5 @@
 import * as yup from 'yup';
 import { roles, validFileExtensions } from '../../config/Constant';
-import { passwordRegExp } from '../../config/regexFormat';
 
 export function isValidFileType(fileName, fileType) {
   return fileName && validFileExtensions[fileType].indexOf(fileName.split('.').pop()) > -1;
@@ -11,12 +10,13 @@ const schemaUser = yup.object().shape({
   email: yup.string().email().required('Email is required'),
   phone: yup.string().required('Phone is required'),
   date_of_birth: yup.date().required('Date of birth is required'),
-  password: yup
-    .string()
-    .matches(
-      passwordRegExp,
-      'Password must be at least 6 characters long, have at least one uppercase letter, one lowercase letter, one number, and one special character',
-    ),
+  // password: yup
+  //   .string()
+  //   .matches(
+  //     passwordRegExp,
+  //     'Password must be at least 6 characters long, have at least one uppercase letter, one lowercase letter, one number, and one special character',
+  //   ),
+  password: yup.string().required('Password is required'),
   role: yup.number().required('Role is required'),
   institution_id: yup
     .number()
