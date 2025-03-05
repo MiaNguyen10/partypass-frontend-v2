@@ -1,7 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import { Box } from '@mui/system';
-import { jwtDecode } from 'jwt-decode';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -27,7 +26,7 @@ const BCrumb = [
 
 const TicketCreate = () => {
   const dispatch = useDispatch();
-  const { institution_id } = jwtDecode(sessionStorage.getItem('token'));
+  // const { institution_id } = jwtDecode(sessionStorage.getItem('token'));
   const navigation = useNavigate();
 
   const {
@@ -53,7 +52,7 @@ const TicketCreate = () => {
   const onSubmit = (data) => {
     const ticketData = {
       ...data,
-      institution_id: parseInt(institution_id, 10),
+      institution_id: parseInt(data.institution_id, 10),
       price: parseFloat(data.price),
       capacity: parseInt(data.capacity, 10),
       is_regular: data.is_regular ? 1 : 0,
