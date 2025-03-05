@@ -38,7 +38,7 @@ const TopCards = () => {
     {
       icon: icon5,
       title: 'Revenue',
-      digits: `$${analytics.totalRevenue}`,
+      digits: `€${analytics.totalRevenue}`,
       bgcolor: 'primary',
     },
     {

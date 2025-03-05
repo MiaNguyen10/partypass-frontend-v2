@@ -89,7 +89,7 @@ const TopPerformers = () => {
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography variant="subtitle2">${event.ticketPrice}</Typography>
+                    <Typography variant="subtitle2">€{event.ticketPrice}</Typography>
                   </TableCell>
                 </TableRow>
               ))}
