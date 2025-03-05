@@ -45,7 +45,7 @@ const TableUserList = () => {
       numeric: false,
       disablePadding: false,
       label: 'Role',
-      render: (row) => <Typography color="textSecondary">{roles[row.role].value}</Typography>,
+      render: (row) => <Typography color="textSecondary">{roles[row?.role]?.value}</Typography>,
     },
     {
       id: 'institution',
