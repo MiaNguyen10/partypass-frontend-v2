@@ -79,26 +79,29 @@ const UserCreate = () => {
     }
 
     dispatch(createUser({ userData: formData }))
-      .then(() => {
-        if (fileInputRef.current) {
-          fileInputRef.current.value = null;
+      .then((resultAction) => {
+        if (createUser.fulfilled.match(resultAction)) {
+          if (fileInputRef.current) {
+            fileInputRef.current.value = null;
+          }
+          Swal.fire({
+            icon: 'success',
+            title: 'New user added successfully',
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            navigation('/users');
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'User creation failed!',
+          });
         }
-        Swal.fire({
-          icon: 'success',
-          title: 'New user added successfully',
-          showConfirmButton: false,
-          timer: 1500,
-        }).then(() => {
-          navigation('/users');
-        });
       })
       .catch((error) => {
         console.error(error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'User creation failed!',
-        });
       });
     reset();
   };

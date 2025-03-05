@@ -1,10 +1,14 @@
 import { Box, CardContent, Typography } from '@mui/material';
 import { Stack, styled } from '@mui/system';
 import dayjs from 'dayjs';
-import { useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import BlankCard from '../../components/shared/BlankCard';
 import { roles } from '../../config/Constant';
+import { getUser } from '../../store/reducers/user/userSlice';
+import { useEffect } from 'react';
+import { getUserById } from '../../store/thunk/user';
+import { useParams } from 'react-router';
 
 const DetailTypo = styled(Typography)(({ theme }) => ({
   color: theme.palette.black,
@@ -12,10 +16,13 @@ const DetailTypo = styled(Typography)(({ theme }) => ({
 }));
 
 const UserDetail = () => {
-  const location = useLocation();
-  const {
-    state: { user: userInformatioin },
-  } = location;
+  const { id } = useParams();
+  const userInformatioin = useSelector(getUser);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getUserById({ user_id: id }));
+  }, [dispatch, id]);
 
   const BCrumb = [
     {
@@ -60,14 +67,13 @@ const UserDetail = () => {
           </Stack>
           <Stack direction="row" gap={6} alignItems="center" my={2}>
             <DetailTypo>
-              <strong>Role: </strong>{' '}
-              {roles[userInformatioin?.role]?.value}
+              <strong>Role: </strong> {roles[userInformatioin?.role]?.value}
             </DetailTypo>
           </Stack>
           {userInformatioin?.institution_id && (
             <Stack direction="row" gap={6} alignItems="center" my={2}>
               <DetailTypo>
-                <strong>Institution: </strong> {userInformatioin?.institution_id}
+                <strong>Institution: </strong> {userInformatioin?.institution?.name}
               </DetailTypo>
             </Stack>
           )}

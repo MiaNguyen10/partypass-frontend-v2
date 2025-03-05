@@ -90,24 +90,27 @@ const InstitutionTicketEdit = () => {
     };
 
     dispatch(updateTicket({ ticket_id: id, ticketData }))
-      .then(() => {
-        dispatch(getTicketById(id));
-        Swal.fire({
-          icon: 'success',
-          title: 'Ticket updated successfully',
-          showConfirmButton: false,
-          timer: 1500,
-        }).then(() => {
-          navigation('/tickets_institution');
-        });
+      .then((resultAction) => {
+        if (updateTicket.fulfilled.match(resultAction)) {
+          dispatch(getTicketById(id));
+          Swal.fire({
+            icon: 'success',
+            title: 'Ticket updated successfully',
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            navigation('/tickets_institution');
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ticket update failed!',
+          });
+        }
       })
       .catch((error) => {
         console.error(error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Ticket update failed!',
-        });
       });
   };
 

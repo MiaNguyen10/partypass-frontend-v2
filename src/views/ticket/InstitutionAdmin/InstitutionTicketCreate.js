@@ -74,23 +74,26 @@ const InstitutionTicketCreate = () => {
       end_datetime: data.is_regular ? '' : data.end_datetime,
     };
     dispatch(createTicket(ticketData))
-      .then(() => {
-        Swal.fire({
-          icon: 'success',
-          title: 'New ticket created successfully',
-          showConfirmButton: false,
-          timer: 1500,
-        }).then(() => {
-          navigation('/tickets_institution');
-        });
+      .then((resultAction) => {
+        if (createTicket.fulfilled.match(resultAction)) {
+          Swal.fire({
+            icon: 'success',
+            title: 'New ticket created successfully',
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            navigation('/tickets_institution');
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ticket creation failed!',
+          });
+        }
       })
       .catch((error) => {
         console.error(error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Ticket creation failed!',
-        });
       });
     reset();
   };

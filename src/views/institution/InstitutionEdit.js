@@ -94,41 +94,45 @@ const InstitutionEdit = () => {
     formData.append('video_link', data.video_link);
     formData.append('status', data.status === 'Active' ? 1 : 0);
 
-    // Append the image file
-    // Check if `cover_photo` is a file or a URL
+    // Handle cover_photo (file or URL)
     if (data.cover_photo) {
       if (data.cover_photo[0] instanceof File) {
-        // If it's a file, append the file
-        formData.append('cover_photo', data.cover_photo[0]);
+        formData.append('cover_photo', data.cover_photo[0]); // If it's a file
       } else if (typeof data.cover_photo === 'string') {
-        // If it's a URL, append the URL directly
-        formData.append('cover_photo', data.cover_photo);
+        formData.append('cover_photo', data.cover_photo); // If it's a URL
       }
     }
 
     dispatch(updateInstitution({ institutionData: formData, institution_id: id }))
-      .then(() => {
-        dispatch(getInstitutionById(id));
-        // Reset the file input
-        if (fileInputRef.current) {
-          fileInputRef.current.value = null;
+      .then((resultAction) => {
+        if (updateInstitution.fulfilled.match(resultAction)) {
+          // Fetch updated institution data
+          dispatch(getInstitutionById(id));
+
+          // Reset the file input if successful
+          if (fileInputRef.current) {
+            fileInputRef.current.value = null;
+          }
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Institution updated successfully',
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            navigation('/institutions');
+          });
+        } else {
+          // Trigger catch block manually if rejected
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: resultAction.payload?.message || 'Institution update failed!',
+          });
         }
-        Swal.fire({
-          icon: 'success',
-          title: 'Institution updated successfully',
-          showConfirmButton: false,
-          timer: 1500,
-        }).then(() => {
-          navigation('/institutions');
-        });
       })
       .catch((error) => {
-        console.log(error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Institution update failed!',
-        });
+        console.error('Institution update failed:', error);
       });
   };
 

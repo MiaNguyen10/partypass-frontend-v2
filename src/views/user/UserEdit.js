@@ -6,9 +6,11 @@ import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { loading_status } from '../../config/Constant';
 import Breadcrumb from '../../layouts/full/shared/breadcrumb/Breadcrumb';
+import { getUser } from '../../store/reducers/user/userSlice';
 import { getUserById, updateUserById } from '../../store/thunk/user';
 import schemaUser from './schemaUser';
 import UserForm from './UserForm';
@@ -30,13 +32,9 @@ const BCrumb = [
 const UserEdit = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const location = useLocation();
-  const getUserInformation = useSelector((state) => state.user);
+  const locationUser = useSelector(getUser);
   const navigation = useNavigate();
-
-  const {
-    state: { user: locationUser },
-  } = location;
+  const loadingStatus = useSelector((state) => state.user.loading);
 
   const fileInputRef = useRef(null);
 
@@ -82,7 +80,7 @@ const UserEdit = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationUser]);
-  
+
   const onSubmit = (data) => {
     const userData = {
       ...data,
@@ -107,27 +105,30 @@ const UserEdit = () => {
     });
 
     dispatch(updateUserById({ user_id: id, userData: formData }))
-      .then(() => {
-        dispatch(getUserById({ user_id: id }));
-        if (fileInputRef.current) {
-          fileInputRef.current.value = null;
+      .then((resultAction) => {
+        if (updateUserById.fulfilled.match(resultAction)) {
+          dispatch(getUserById({ user_id: id }));
+          if (fileInputRef.current) {
+            fileInputRef.current.value = null;
+          }
+          Swal.fire({
+            icon: 'success',
+            title: 'User updated successfully',
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            navigation('/users');
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'User update failed!',
+          });
         }
-        Swal.fire({
-          icon: 'success',
-          title: 'User updated successfully',
-          showConfirmButton: false,
-          timer: 1500,
-        }).then(() => {
-          navigation('/users');
-        });
       })
       .catch((error) => {
         console.error(error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'User update failed!',
-        });
       });
   };
 
@@ -148,7 +149,7 @@ const UserEdit = () => {
             reset={reset}
             setValue={setValue}
             fileInputRef={fileInputRef}
-            pending={getUserInformation.loading === 'pending'}
+            pending={loadingStatus === loading_status.pending}
           />
         </Grid>
       </Grid>

@@ -108,29 +108,32 @@ const InstitutionEdit2 = () => {
     }
 
     dispatch(updateInstitution({ institutionData: formData, institution_id: institution_id }))
-      .then(() => {
-        dispatch(getInstitutionById(institution_id));
+      .then((resultAction) => {
+        if (updateInstitution.fulfilled.match(resultAction)) {
+          dispatch(getInstitutionById(institution_id));
 
-        // Reset the file input
-        if (fileInputRef.current) {
-          fileInputRef.current.value = null;
+          // Reset the file input
+          if (fileInputRef.current) {
+            fileInputRef.current.value = null;
+          }
+          Swal.fire({
+            icon: 'success',
+            title: 'Institution updated successfully',
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            navigation('/institution_detail');
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: resultAction.payload?.message || 'Institution update failed!',
+          });
         }
-        Swal.fire({
-          icon: 'success',
-          title: 'Institution updated successfully',
-          showConfirmButton: false,
-          timer: 1500,
-        }).then(() => {
-          navigation('/institution_detail');
-        });
       })
       .catch((error) => {
         console.log(error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Institution update failed!',
-        });
       });
   };
 

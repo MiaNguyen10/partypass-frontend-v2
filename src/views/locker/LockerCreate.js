@@ -50,23 +50,26 @@ const LockerCreate = () => {
       institution_id: parseInt(institution_id, 10),
     };
     dispatch(createLocker({ lockerData }))
-      .then(() => {
-        Swal.fire({
-          icon: 'success',
-          title: 'New locker created successfully',
-          showConfirmButton: false,
-          timer: 1500,
-        }).then(() => {
-          navigation('/lockers');
-        });
+      .then((resultAction) => {
+        if (createLocker.fulfilled.match(resultAction)) {
+          Swal.fire({
+            icon: 'success',
+            title: 'New locker created successfully',
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            navigation('/lockers');
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Locker creation failed!',
+          });
+        }
       })
       .catch((error) => {
         console.error(error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Locker creation failed!',
-        });
       });
     reset();
   };

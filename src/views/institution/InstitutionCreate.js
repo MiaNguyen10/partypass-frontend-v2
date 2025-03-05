@@ -52,7 +52,7 @@ const InstitutionCreate = () => {
     },
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     // Create a FormData object
     const formData = new FormData();
 
@@ -71,8 +71,11 @@ const InstitutionCreate = () => {
       formData.append('cover_photo', data.cover_photo[0]);
     }
 
-    dispatch(createInstitution({ institutionData: formData }))
-      .then(() => {
+    try {
+      const resultAction = await dispatch(createInstitution({ institutionData: formData }));
+
+      if (createInstitution.fulfilled.match(resultAction)) {
+        // Reset file input if successful
         if (fileInputRef.current) {
           fileInputRef.current.value = null;
         }
@@ -84,15 +87,17 @@ const InstitutionCreate = () => {
         }).then(() => {
           navigation('/institutions');
         });
-      })
-      .catch((error) => {
-        console.log(error);
+      } else {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
-          text: 'Institution creation failed!',
+          text: resultAction.payload?.message || 'Institution creation failed!',
         });
-      });
+      }
+    } catch (error) {
+      console.error('Institution creation failed:', error);
+    }
+
     reset();
   };
 

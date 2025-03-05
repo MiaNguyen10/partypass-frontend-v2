@@ -70,24 +70,27 @@ const LockerEdit = () => {
       institution_id: institution_id,
     };
     dispatch(updateLocker({ locker_id: id, lockerData }))
-      .then(() => {
-        dispatch(getLockerById({ locker_id: id }));
-        Swal.fire({
-          icon: 'success',
-          title: 'Locker updated successfully',
-          showConfirmButton: false,
-          timer: 1500,
-        }).then(() => {
-          navigation('/lockers');
-        });
+      .then((resultAction) => {
+        if (updateLocker.fulfilled.match(resultAction)) {
+          dispatch(getLockerById({ locker_id: id }));
+          Swal.fire({
+            icon: 'success',
+            title: 'Locker updated successfully',
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            navigation('/lockers');
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Locker update failed!',
+          });
+        }
       })
       .catch((error) => {
         console.log(error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Locker update failed!',
-        });
       });
   };
 
