@@ -112,7 +112,7 @@ const InstitutionDetail2 = () => {
             {institution.map_location ? (
               <MapComponent mapUrl={institution.map_location} />
             ) : (
-              <p>No map location</p>
+              <DetailTypo>No map location</DetailTypo>
             )}
           </Stack>
           <Stack direction="row" gap={6} alignItems="center" my={2}>
@@ -128,7 +128,7 @@ const InstitutionDetail2 = () => {
                   Press here to open video
                 </Link>
               ) : (
-                <p>No video</p>
+                <DetailTypo>No video</DetailTypo>
               )}
             </DetailTypo>
           </Stack>

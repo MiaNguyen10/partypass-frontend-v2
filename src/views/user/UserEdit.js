@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { loading_status, roles } from '../../config/Constant';
+import { roles } from '../../config/Constant';
 import Breadcrumb from '../../layouts/full/shared/breadcrumb/Breadcrumb';
 import { getUser } from '../../store/reducers/user/userSlice';
 import { getUserById, updateUserById } from '../../store/thunk/user';
@@ -34,7 +34,6 @@ const UserEdit = () => {
   const dispatch = useDispatch();
   const locationUser = useSelector(getUser);
   const navigation = useNavigate();
-  const loadingStatus = useSelector((state) => state.user.loading);
 
   const fileInputRef = useRef(null);
 
@@ -60,8 +59,10 @@ const UserEdit = () => {
       institution_id: '',
       is_social: false,
       social_uuid: '',
-      profile_pic: null,
+      profile_pic: [],
+      password: '',
     },
+    context: { isEdit: true },
   });
 
   useEffect(() => {
@@ -73,7 +74,7 @@ const UserEdit = () => {
         date_of_birth: dayjs(locationUser.date_of_birth),
         role: locationUser.role,
         institution_id: locationUser.institution?.institution_id || '',
-        is_social: locationUser.is_social === 1,
+        is_social: locationUser.is_social,
         social_uuid: locationUser.social_uuid,
         profile_pic: locationUser.profile_pic || [],
       });
@@ -84,7 +85,12 @@ const UserEdit = () => {
   const onSubmit = (data) => {
     const userData = {
       ...data,
-      institution_id: data.role === roles[1].id ? null : parseInt(data.institution_id, 10),
+      institution_id:
+        data.role === roles[1].id
+          ? null
+          : data.institution_id
+          ? parseInt(data.institution_id, 10)
+          : null,
       role: parseInt(data.role, 10),
       is_social: data.is_social ? 1 : 0,
     };
@@ -139,7 +145,7 @@ const UserEdit = () => {
   return (
     <Box>
       {/* breadcrumb */}
-      <Breadcrumb title="Edit Ticket" items={BCrumb} />
+      <Breadcrumb title="Edit User" items={BCrumb} />
       {/* end breadcrumb */}
 
       <Grid container spacing={3}>
@@ -153,7 +159,6 @@ const UserEdit = () => {
             reset={reset}
             setValue={setValue}
             fileInputRef={fileInputRef}
-            pending={loadingStatus === loading_status.pending}
           />
         </Grid>
       </Grid>

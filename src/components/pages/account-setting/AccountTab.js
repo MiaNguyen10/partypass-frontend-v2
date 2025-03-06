@@ -105,7 +105,11 @@ const AccountTab = () => {
           });
         }
       } else {
-        formData.append(key, userData[key]);
+        if (key === 'date_of_birth') {
+          formData.append('date_of_birth', userData[key].toISOString());
+        } else {
+          formData.append(key, userData[key]);
+        }
       }
     });
 

@@ -26,7 +26,6 @@ const UserForm = ({
   setValue,
   reset,
   fileInputRef,
-  pending,
 }) => {
   const profile_pic = watch('profile_pic');
   const role = watch('role');
@@ -217,7 +216,7 @@ const UserForm = ({
               <FormControlLabel
                 control={
                   <CustomCheckbox
-                    checked={value || false}
+                    checked={!!value}
                     onChange={(e) => onChange(e.target.checked)}
                     name="is_social"
                     color="primary"
@@ -229,7 +228,7 @@ const UserForm = ({
           )}
         />
 
-        {watch('is_social') && (
+        {watch('is_social') == 1 && (
           <Controller
             control={control}
             name="social_uuid"
@@ -300,7 +299,7 @@ const UserForm = ({
           >
             Cancel
           </Button>
-          <Button variant="contained" color="primary" type="submit" disabled={pending}>
+          <Button variant="contained" color="primary" type="submit">
             Submit
           </Button>
         </Box>
@@ -318,7 +317,6 @@ UserForm.propTypes = {
   watch: PropTypes.func.isRequired,
   setValue: PropTypes.func.isRequired,
   fileInputRef: PropTypes.object.isRequired,
-  pending: PropTypes.bool.isRequired,
 };
 
 export default UserForm;

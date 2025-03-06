@@ -10,40 +10,28 @@ const schemaUser = yup.object().shape({
   email: yup.string().email().required('Email is required'),
   phone: yup.string().required('Phone is required'),
   date_of_birth: yup.date().required('Date of birth is required'),
-  // password: yup
-  //   .string()
-  //   .matches(
-  //     passwordRegExp,
-  //     'Password must be at least 6 characters long, have at least one uppercase letter, one lowercase letter, one number, and one special character',
-  //   ),
-  password: yup.string().required('Password is required'),
+  password: yup.string().when('$isEdit', {
+    is: false,
+    then: yup.string().required('Password is required'),
+    otherwise: yup.string(),
+  }),
   role: yup.number().required('Role is required'),
   institution_id: yup
-    .number()
+    .mixed()
     .nullable()
+    .transform((value, originalValue) => {
+      return originalValue === '' ? null : Number(originalValue);
+    })
     .when('role', (role, schema) => {
-      if (role === roles[2].id || role === roles[3].id) {
+      if ([roles[2]?.id, roles[3]?.id].includes(role)) {
         return schema.required('Institution is required');
       }
       return schema;
     }),
-
   social_uuid: yup.string().when('is_social', {
     is: true,
     then: yup.string().required('Social UUID is required'),
   }),
-  // profile_pic: yup.array().of(
-  //   yup
-  //     .mixed()
-  //     .test('is-valid-type', 'Not a valid image type', (value) =>
-  //       isValidFileType(value && value.name.toLowerCase(), 'image'),
-  //     )
-  //     .test(
-  //       'is-valid-size',
-  //       'Max allowed size is 5000KB',
-  //       (value) => value && value.size <= MAX_FILE_SIZE,
-  //     ),
-  // ),
 });
 
 export default schemaUser;
