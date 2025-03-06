@@ -3,7 +3,6 @@ import * as yup from 'yup';
 
 const schemaTicket = yup.object().shape({
   name: yup.string().required('Name is required'),
-  description: yup.string(),
   institution_id: yup
     .number()
     .typeError('Institution must be a number')
@@ -18,7 +17,6 @@ const schemaTicket = yup.object().shape({
     .typeError('Capacity must be a number')
     .min(1, 'Capacity must be at least 1')
     .required('Capacity is required'),
-  benefits: yup.string(),
   is_regular: yup.boolean(),
   date: yup
     .date()

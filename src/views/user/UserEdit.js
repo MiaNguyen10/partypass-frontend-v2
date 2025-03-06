@@ -105,12 +105,13 @@ const UserEdit = () => {
             formData.append(key, file);
           });
         }
-      } else {
-        if (key === 'date_of_birth') {
-          formData.append('date_of_birth', userData[key].toISOString());
-        } else {
-          formData.append(key, userData[key]);
-        }
+      } else if (key === 'date_of_birth') {
+        formData.append('date_of_birth', userData[key].toISOString());
+      } else if (key === 'password' && userData[key]) {
+        // Only append password if it is entered
+        formData.append('password', userData[key]);
+      } else if (key !== 'password') {
+        formData.append(key, userData[key]);
       }
     });
 
@@ -140,7 +141,8 @@ const UserEdit = () => {
       .catch((error) => {
         console.error(error);
       });
-  };
+};
+
 
   return (
     <Box>
